@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Web", "Cinema.Web\Cinema.Web.csproj", "{B09639AD-0F75-4465-8198-E135E3F0CE5E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2C34E97B-D4BA-4BD9-AB9E-DDA788927191} = {2C34E97B-D4BA-4BD9-AB9E-DDA788927191}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cinema.Presentation", "Cinema.Presentation", "{5ACE0603-0138-4F8E-AE0B-606B5497E195}"
 EndProject
@@ -11,15 +14,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CE8A86E9-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{0D796C96-ADE6-4370-928D-5859DB361399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{81AF88F3-EE2B-4697-848E-9C331C91AEEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{81AF88F3-EE2B-4697-848E-9C331C91AEEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema.Application", "Cinema.Application\Cinema.Application.csproj", "{1E24F9AA-4BC1-49BD-83D5-B45D1BB15B23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Application", "Cinema.Application\Cinema.Application.csproj", "{1E24F9AA-4BC1-49BD-83D5-B45D1BB15B23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema.Domain", "Cinema.Domain\Cinema.Domain.csproj", "{2C34E97B-D4BA-4BD9-AB9E-DDA788927191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Domain", "Cinema.Domain\Cinema.Domain.csproj", "{2C34E97B-D4BA-4BD9-AB9E-DDA788927191}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema.Persistence", "Cinema.Persistence\Cinema.Persistence.csproj", "{FD6301D6-6101-42B0-BF50-13FA560DCA97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Persistence", "Cinema.Persistence\Cinema.Persistence.csproj", "{FD6301D6-6101-42B0-BF50-13FA560DCA97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema.Controllers", "Cinema.Controllers\Cinema.Controllers.csproj", "{1389CCE5-253D-4D8E-B736-B813C4588A48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Controllers", "Cinema.Controllers\Cinema.Controllers.csproj", "{1389CCE5-253D-4D8E-B736-B813C4588A48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2C34E97B-D4BA-4BD9-AB9E-DDA788927191} = {2C34E97B-D4BA-4BD9-AB9E-DDA788927191}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
