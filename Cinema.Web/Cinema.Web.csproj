@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Cinema.Domain">
-      <HintPath>..\Cinema.Domain\bin\Debug\net8.0\Cinema.Domain.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Cinema.Domain\Cinema.Domain.csproj" />
   </ItemGroup>
 
 </Project>
