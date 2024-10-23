@@ -1,7 +1,7 @@
 ﻿using Cinema.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cinema.Web.Extensions
+namespace Cinema.API.Extensions
 {
     public static class ServiceExtensions
     {

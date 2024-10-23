@@ -1,9 +1,9 @@
-using Cinema.Web.Data;
-using Cinema.Web.Extensions;
+using Cinema.API.Data;
+using Cinema.API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cinema.Web
+namespace Cinema.API
 {
     public class Program
     {

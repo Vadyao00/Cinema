@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cinema.Web.Data
+namespace Cinema.API.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

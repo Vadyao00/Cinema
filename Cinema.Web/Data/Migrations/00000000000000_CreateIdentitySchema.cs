@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Cinema.Web.Data.Migrations
+namespace Cinema.API.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
