@@ -1,4 +1,7 @@
-﻿using Cinema.Persistence;
+﻿using Cinema.Application.Services;
+using Cinema.Persistence;
+using Contracts.IRepositories;
+using Contracts.IServices;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema.API.Extensions
@@ -22,7 +25,11 @@ namespace Cinema.API.Extensions
                 })
             );
 
-        //public static void ConfigureRepositoryManager(this IServiceCollection services) =>
-        //    services.AddScoped<IrepositoryManager, RepositoryManager>();
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
+
     }
 }

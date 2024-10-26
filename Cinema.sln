@@ -27,10 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Controllers", "Cinem
 		{2C34E97B-D4BA-4BD9-AB9E-DDA788927191} = {2C34E97B-D4BA-4BD9-AB9E-DDA788927191}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{329E3231-FEF8-4D31-863E-F7E326C735C6}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema.LoggerService", "Cinema.LoggerService\Cinema.LoggerService.csproj", "{FEB3099C-10C8-49DB-80B3-B6F49E7753DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +59,10 @@ Global
 		{1389CCE5-253D-4D8E-B736-B813C4588A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1389CCE5-253D-4D8E-B736-B813C4588A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1389CCE5-253D-4D8E-B736-B813C4588A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB3099C-10C8-49DB-80B3-B6F49E7753DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB3099C-10C8-49DB-80B3-B6F49E7753DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB3099C-10C8-49DB-80B3-B6F49E7753DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB3099C-10C8-49DB-80B3-B6F49E7753DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +74,7 @@ Global
 		{2C34E97B-D4BA-4BD9-AB9E-DDA788927191} = {CE8A86E9-856B-45A1-83D1-8ADE2FDD8210}
 		{FD6301D6-6101-42B0-BF50-13FA560DCA97} = {0D796C96-ADE6-4370-928D-5859DB361399}
 		{1389CCE5-253D-4D8E-B736-B813C4588A48} = {0D796C96-ADE6-4370-928D-5859DB361399}
+		{FEB3099C-10C8-49DB-80B3-B6F49E7753DE} = {0D796C96-ADE6-4370-928D-5859DB361399}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77027A44-84D1-4E9D-874A-DDF3AB105FA7}

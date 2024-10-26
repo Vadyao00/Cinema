@@ -6,7 +6,11 @@ namespace Cinema.Persistence.Repositories
 {
     public class TicketRepository(CinemaContext dbContext) : RepositoryBase<Ticket>(dbContext), ITicketRepository
     {
-        public void CreateTicket(Ticket ticket) => Create(ticket);
+        public void CreateTicketForSeat(Guid seatId, Ticket ticket)
+        {
+            ticket.SeatId = seatId;
+            Create(ticket);
+        }
 
         public void DeleteTicket(Ticket ticket) => Delete(ticket);
 

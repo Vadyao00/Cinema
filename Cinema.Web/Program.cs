@@ -23,6 +23,9 @@ namespace Cinema.API
             {
                 app.UseHsts();
             }
+
+            ConfigureApp(app);
+
             app.Map("/", () => "Course work");
             app.Run();
         }
@@ -33,7 +36,9 @@ namespace Cinema.API
 
             services.ConfigureSqlContext(configuration);
 
+            services.ConfigureRepositoryManager();
 
+            services.ConfigureServiceManager();
 
         }
 

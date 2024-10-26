@@ -6,12 +6,16 @@ namespace Cinema.Persistence.Repositories
 {
     public class ShowtimeRepository(CinemaContext dbContext) : RepositoryBase<Showtime>(dbContext), IShowtimeRepository
     {
-        public void CreateShowtime(Showtime showtime) => Create(showtime);
+        public void CreateShowtimeForMovie(Guid movieId, Showtime showtime)
+        {
+            showtime.MovieId = movieId;
+            Create(showtime);
+        }
 
-        public void DeleteShowtime(Showtime showtime) => Delete(showtime);
+        public void DeleteShowtimeForMovie(Showtime showtime) => Delete(showtime);
 
-        public async Task<IEnumerable<Showtime>> GetAllShowtimesAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<IEnumerable<Showtime>> GetAllShowtimesForMovieAsync(Guid movieId, bool trackChanges) =>
+            await FindByCondition(s => s.MovieId.Equals(movieId),trackChanges)
                   .OrderBy(s => s.StartTime)
                   .ToListAsync();
 
@@ -19,8 +23,8 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(s => ids.Contains(s.ShowtimeId), trackChanges)
                   .ToListAsync();
 
-        public async Task<Showtime> GetShowtimeAsync(Guid id, bool trackChanges) =>
-            await FindByCondition(s => s.ShowtimeId.Equals(id), trackChanges)
+        public async Task<Showtime> GetShowtimeForMovieAsync(Guid movieId, Guid id, bool trackChanges) =>
+            await FindByCondition(s => s.ShowtimeId.Equals(id) && s.MovieId.Equals(movieId), trackChanges)
                   .SingleOrDefaultAsync();
     }
 }

@@ -6,7 +6,7 @@ namespace Contracts.IRepositories
     {
         Task<IEnumerable<Ticket>> GetAllTicketsAsync(bool trackChanges);
         Task<Ticket> GetTicketAsync(Guid id, bool trackChanges);
-        void CreateTicket(Ticket ticket);
+        void CreateTicketForSeat(Guid seatId, Ticket ticket);
         Task<IEnumerable<Ticket>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         void DeleteTicket(Ticket ticket);
     }
