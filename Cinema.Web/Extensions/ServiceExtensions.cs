@@ -1,4 +1,5 @@
 ﻿using Cinema.Application.Services;
+using Cinema.LoggerService;
 using Cinema.Persistence;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -25,11 +26,15 @@ namespace Cinema.API.Extensions
                 })
             );
 
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
         public static void ConfigureServiceManager(this IServiceCollection services) =>
             services.AddScoped<IServiceManager, ServiceManager>();
+
 
     }
 }

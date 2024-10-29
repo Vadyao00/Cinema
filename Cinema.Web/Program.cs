@@ -1,12 +1,23 @@
 using Cinema.API.Data;
 using Cinema.API.Extensions;
+using Cinema.Controllers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Cinema.Controllers.Filters;
 
 namespace Cinema.API
 {
     public class Program
     {
+        static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+        new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+        .Services.BuildServiceProvider()
+        .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+        .OfType<NewtonsoftJsonPatchInputFormatter>().First();
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +37,8 @@ namespace Cinema.API
 
             ConfigureApp(app);
 
-            app.Map("/", () => "Course work");
+            app.MapControllers();
+
             app.Run();
         }
 
@@ -34,12 +46,28 @@ namespace Cinema.API
         {
             services.ConfigureCors();
 
-            services.ConfigureSqlContext(configuration);
+            services.AddScoped<ValidationFilterAttribute>();
+
+            services.ConfigureLoggerService();
 
             services.ConfigureRepositoryManager();
 
             services.ConfigureServiceManager();
 
+            services.ConfigureSqlContext(configuration);
+
+            services.AddControllers(config =>
+            {
+                config.RespectBrowserAcceptHeader = true;
+                config.ReturnHttpNotAcceptable = true;
+                config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
+            }).AddXmlDataContractSerializerFormatters()
+              .AddApplicationPart(typeof(AssemblyReference).Assembly);
+
+            services.AddAutoMapper(typeof(Program));
+
+            services.AddAuthorization();
         }
 
         public static void ConfigureApp(IApplicationBuilder app)
