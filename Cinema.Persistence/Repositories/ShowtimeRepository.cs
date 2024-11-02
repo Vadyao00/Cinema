@@ -16,6 +16,7 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<IEnumerable<Showtime>> GetAllShowtimesForMovieAsync(Guid movieId, bool trackChanges) =>
             await FindByCondition(s => s.MovieId.Equals(movieId),trackChanges)
+                  .Include(s => s.Movie)
                   .OrderBy(s => s.StartTime)
                   .ToListAsync();
 
@@ -25,6 +26,12 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<Showtime> GetShowtimeForMovieAsync(Guid movieId, Guid id, bool trackChanges) =>
             await FindByCondition(s => s.ShowtimeId.Equals(id) && s.MovieId.Equals(movieId), trackChanges)
+                  .Include(s => s.Movie)
+                  .SingleOrDefaultAsync();
+
+        public async Task<Showtime> GetShowtimeAsync(Guid id, bool trackChanges) =>
+            await FindByCondition(s => s.ShowtimeId.Equals(id), trackChanges)
+                  .Include(s => s.Movie)
                   .SingleOrDefaultAsync();
     }
 }

@@ -19,7 +19,7 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(e => ids.Contains(e.EventId), trackChanges)
                   .ToListAsync();
 
-        public async Task<Event> GetEventsAsync(Guid id, bool trackChanges) =>
+        public async Task<Event> GetEventAsync(Guid id, bool trackChanges) =>
             await FindByCondition(e => e.EventId.Equals(id), trackChanges)
                   .SingleOrDefaultAsync();
     }

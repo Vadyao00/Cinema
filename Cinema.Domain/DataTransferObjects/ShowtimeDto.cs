@@ -4,7 +4,7 @@
     {
         public Guid ShowtimeId { get; init; }
 
-        public Guid MovieId { get; init; }
+        public string? MovieTitle { get; init; }
 
         public DateOnly Date { get; init; }
 

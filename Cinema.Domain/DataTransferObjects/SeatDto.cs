@@ -4,9 +4,9 @@
     {
         public Guid SeatId { get; init; }
 
-        public Guid? ShowtimeId { get; init; }
+        public string? ShowtimeName { get; init; }
 
-        public Guid? EventId { get; init; }
+        public string? EventName { get; init; }
 
         public int? SeatNumber { get; init; }
 

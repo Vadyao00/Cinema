@@ -30,6 +30,10 @@ namespace Cinema.Application.Services
             _repository.Showtime.CreateShowtimeForMovie(movieId, showtimeDb);
             await _repository.SaveAsync();
 
+            var movieDb = await GetMovieModelAsync(genreId, movieId, trackChanges: false);
+
+            showtimeDb.Movie = movieDb;
+
             var showtimeToReturn = _mapper.Map<ShowtimeDto>(showtimeDb);
             return showtimeToReturn;
         }
@@ -79,6 +83,15 @@ namespace Cinema.Application.Services
             var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
             if (movie is null)
                 throw new MovieNotFoundException(movieId);
+        }
+
+        private async Task<Movie> GetMovieModelAsync(Guid genreId, Guid movieId, bool trackChanges)
+        {
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movie is null)
+                throw new MovieNotFoundException(movieId);
+
+            return movie;
         }
 
         private async Task<Showtime> GetShowtimeForMovieAndCheckIfItExists(Guid movieId, Guid id, bool trackChanges)

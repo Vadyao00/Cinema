@@ -4,9 +4,8 @@
     {
         public Guid TicketId { get; init; }
 
-        public Guid SeatId { get; init; }
+        public int? SeatNumber { get; init; }
 
         public DateOnly PurchaseDate { get; init; }
-
     }
 }

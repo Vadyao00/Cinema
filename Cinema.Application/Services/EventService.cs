@@ -83,7 +83,7 @@ namespace Cinema.Application.Services
 
         private async Task<Event> GetEventAndCheckIfItExists(Guid id, bool trackChanges)
         {
-            var eevent = await _repository.Event.GetEventsAsync(id, trackChanges);
+            var eevent = await _repository.Event.GetEventAsync(id, trackChanges);
             if (eevent is null)
                 throw new EventNotFoundException(id);
             return eevent;

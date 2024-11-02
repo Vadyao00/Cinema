@@ -11,10 +11,12 @@ namespace Cinema.Persistence.Repositories
             workLog.EmployeeId = employeeId;
             Create(workLog);
         }
+
         public void DeleteWorkLog(WorkLog workLog) => Delete(workLog);
 
-        public async Task<IEnumerable<WorkLog>> GetAllWorkLogsAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<IEnumerable<WorkLog>> GetAllWorkLogsForEmployeeAsync(Guid employeeId, bool trackChanges) =>
+            await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
+                  .Include(w => w.Employee)
                   .OrderBy(w => w.WorkHours)
                   .ToListAsync();
 
@@ -22,8 +24,9 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(w => ids.Contains(w.WorkLogId), trackChanges)
                   .ToListAsync();
 
-        public async Task<WorkLog> GetWorkLogAsync(Guid id, bool trackChanges) =>
-            await FindByCondition(w => w.WorkLogId.Equals(id), trackChanges)
+        public async Task<WorkLog> GetWorkLogForEmployeeAsync(Guid employeeId, Guid id, bool trackChanges) =>
+            await FindByCondition(w => w.WorkLogId.Equals(id) && w.EmployeeId.Equals(employeeId), trackChanges)
+                  .Include(w => w.Employee)
                   .SingleOrDefaultAsync();
     }
 }

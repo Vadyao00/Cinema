@@ -15,6 +15,6 @@
         public int? AgeRestriction { get; init; }
 
         public string? Description { get; init; }
-        public Guid GenreId { get; init; }
+        public string? GenreName { get; init; }
     }
 }

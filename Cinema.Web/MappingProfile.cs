@@ -12,11 +12,17 @@ namespace Cinema.API
             CreateMap<Employee, EmployeeDto>();
             CreateMap<Event, EventDto>();
             CreateMap<Genre, GenreDto>();
-            CreateMap<Movie, MovieDto>();
-            CreateMap<Seat, SeatDto>();
-            CreateMap<Showtime, ShowtimeDto>();
-            CreateMap<Ticket, TicketDto>();
-            CreateMap<WorkLog, WorkLogDto>();
+            CreateMap<Movie, MovieDto>().ForMember(m => m.GenreName,
+                opt => opt.MapFrom(x => x.Genre.Name));
+            CreateMap<Seat, SeatDto>().ForMember(s => s.EventName,
+                opt => opt.MapFrom(x => x.Event!.Name)).ForMember(s => s.ShowtimeName,
+                opt => opt.MapFrom(x => x.Showtime!.Movie.Title));
+            CreateMap<Showtime, ShowtimeDto>().ForMember(s => s.MovieTitle,
+                opt => opt.MapFrom(x => x.Movie.Title));
+            CreateMap<Ticket, TicketDto>().ForMember(t => t.SeatNumber,
+                opt => opt.MapFrom(x => x.Seat.SeatNumber));
+            CreateMap<WorkLog, WorkLogDto>().ForMember(w => w.EmployeeName,
+                opt => opt.MapFrom(x => x.Employee.Name));
 
             CreateMap<ActorForCreationDto, Actor>();
             CreateMap<EmployeeForCreationDto, Employee>();

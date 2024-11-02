@@ -21,12 +21,26 @@ namespace Cinema.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<SeatDto> CreateSeatForShowtimeOrEventAsync(Guid showtimeId, Guid eventId, SeatForCreationDto seat, bool trackChanges)
+        public async Task<SeatDto> CreateSeatForShowtimeOrEventAsync(Guid? showtimeId, Guid? eventId, SeatForCreationDto seat, bool trackChanges)
         {
             var seatDb = _mapper.Map<Seat>(seat);
 
             _repository.Seat.CreateSeat(eventId, showtimeId,seatDb);
             await _repository.SaveAsync();
+
+            if (showtimeId is null && eventId is not null)
+            {
+                var eevent = await GetEventModelAsync((Guid)eventId);
+                seatDb.Event = eevent;
+                seatDb.Showtime = null;
+            }
+
+            if (showtimeId is not null && eventId is null)
+            {
+                var showtime = await GetShowtimeModelAsync((Guid)showtimeId);
+                seatDb.Event = null;
+                seatDb.Showtime = showtime;
+            }
 
             var seatToReturn = _mapper.Map<SeatDto>(seatDb);
             return seatToReturn;
@@ -71,6 +85,24 @@ namespace Cinema.Application.Services
                 throw new SeatNotFoundException(id);
 
             return seatDb;
+        }
+
+        private async Task<Showtime> GetShowtimeModelAsync(Guid showtimeId)
+        {
+            var showtimeDb = await _repository.Showtime.GetShowtimeAsync(showtimeId, trackChanges: false);
+            if(showtimeDb is null)
+                throw new ShowtimeNotFoundException(showtimeId);
+
+            return showtimeDb;
+        }
+
+        private async Task<Event> GetEventModelAsync(Guid eventId)
+        {
+            var eventDb = await _repository.Event.GetEventAsync(eventId, trackChanges: false);
+            if (eventDb is null)
+                throw new EventNotFoundException(eventId);
+
+            return eventDb;
         }
     }
 }

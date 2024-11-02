@@ -16,7 +16,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet]
         public async Task<IActionResult> GetActors()
         {
-            var actors = await _service.Actor.GetAllActorsAsync(trackChanges: true);
+            var actors = await _service.Actor.GetAllActorsAsync(trackChanges: false);
 
             return Ok(actors);
         }

@@ -4,7 +4,7 @@ namespace Contracts.IServices
 {
     public interface ITicketService
     {
-        Task<IEnumerable<TicketDto>> GetAllTicketsAsync(bool trackChanges);
+        Task<IEnumerable<TicketDto>> GetAllTicketsForSeatAsync(Guid seatId, bool trackChanges);
         Task<TicketDto> GetTicketAsync(Guid seatId, Guid Id, bool trackChanges);
         Task<TicketDto> CreateTicketForSeatAsync(Guid seatId, TicketForCreationDto ticket, bool trackChanges);
         Task DeleteTicketAsync(Guid Id, bool trackChanges);

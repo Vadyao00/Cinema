@@ -31,6 +31,9 @@ namespace Cinema.Application.Services
             _repository.Movie.CreateMovieForGenre(genreId, movieDb);
             await _repository.SaveAsync();
 
+            var genre = await GetGenreModel(genreId, trackChanges: false);
+            movieDb.Genre = genre;
+
             var movieToReturn = _mapper.Map<MovieDto>(movieDb);
             return movieToReturn;
         }
@@ -80,6 +83,14 @@ namespace Cinema.Application.Services
             var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
             if (genre is null)
                 throw new GenreNotFoundException(genreId);
+        }
+
+        private async Task<Genre> GetGenreModel(Guid genreId, bool trackChanges)
+        {
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                throw new GenreNotFoundException(genreId);
+            return genre;
         }
 
         private async Task<Movie> GetMovieForGenreAndCheckIfItExists(Guid genreId, Guid id, bool trackChanges)

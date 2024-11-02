@@ -29,6 +29,9 @@ namespace Cinema.Application.Services
             _repository.Ticket.CreateTicketForSeat(seatId, ticketDb);
             await _repository.SaveAsync();
 
+            var seat = await GetSeatModelAsync(seatId, trackChanges);
+            ticketDb.Seat = seat;
+
             var ticketToReturn = _mapper.Map<TicketDto>(ticketDb);
             return ticketToReturn;
         }
@@ -41,9 +44,9 @@ namespace Cinema.Application.Services
             await _repository.SaveAsync();
         }
 
-        public async Task<IEnumerable<TicketDto>> GetAllTicketsAsync(bool trackChanges)
+        public async Task<IEnumerable<TicketDto>> GetAllTicketsForSeatAsync(Guid seatId, bool trackChanges)
         {
-            var tickets = await _repository.Ticket.GetAllTicketsAsync(trackChanges);
+            var tickets = await _repository.Ticket.GetAllTicketsForSeatAsync(seatId, trackChanges);
             var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(tickets);
 
             return ticketsDto;
@@ -72,6 +75,15 @@ namespace Cinema.Application.Services
             var seat = await _repository.Seat.GetSeatAsync(seatId, trackChanges);
             if (seat is null)
                 throw new SeatNotFoundException(seatId);
+        }
+
+        private async Task<Seat> GetSeatModelAsync(Guid seatId, bool trackChanges)
+        {
+            var seat = await _repository.Seat.GetSeatAsync(seatId, trackChanges);
+            if(seat is null)
+                throw new SeatNotFoundException(seatId);
+
+            return seat;
         }
 
         private async Task<Ticket> GetTicketForSeatAndCheckIfItExists(Guid id, bool trackChanges)

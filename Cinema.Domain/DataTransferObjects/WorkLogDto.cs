@@ -4,7 +4,7 @@
     {
         public Guid WorkLogId { get; init; }
 
-        public Guid EmployeeId { get; init; }
+        public string? EmployeeName { get; init; }
 
         public int WorkExperience { get; init; }
 
