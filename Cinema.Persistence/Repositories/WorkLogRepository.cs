@@ -20,10 +20,6 @@ namespace Cinema.Persistence.Repositories
                   .OrderBy(w => w.WorkHours)
                   .ToListAsync();
 
-        public async Task<IEnumerable<WorkLog>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
-            await FindByCondition(w => ids.Contains(w.WorkLogId), trackChanges)
-                  .ToListAsync();
-
         public async Task<WorkLog> GetWorkLogForEmployeeAsync(Guid employeeId, Guid id, bool trackChanges) =>
             await FindByCondition(w => w.WorkLogId.Equals(id) && w.EmployeeId.Equals(employeeId), trackChanges)
                   .Include(w => w.Employee)

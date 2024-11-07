@@ -1,14 +1,14 @@
 ﻿using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.Responses;
 
 namespace Contracts.IServices
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventDto>> GetAllEventsAsync(bool trackChanges);
-        Task<EventDto> GetEventAsync(Guid eventId, bool trackChanges);
+        Task<ApiBaseResponse> GetAllEventsAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetEventAsync(Guid eventId, bool trackChanges);
         Task<EventDto> CreateEventAsync(EventForCreationDto eevent);
-        Task<IEnumerable<EventDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
-        Task DeleteEventAsync(Guid eventId, bool trackChanges);
-        Task UpdateEventAsync(Guid eventId, EventForUpdateDto eventForUpdate, bool trackChanges);
+        Task<ApiBaseResponse> DeleteEventAsync(Guid eventId, bool trackChanges);
+        Task<ApiBaseResponse> UpdateEventAsync(Guid eventId, EventForUpdateDto eventForUpdate, bool trackChanges);
     }
 }

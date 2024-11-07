@@ -20,10 +20,6 @@ namespace Cinema.Persistence.Repositories
                   .OrderBy(t => t.TicketId)
                   .ToListAsync();
 
-        public async Task<IEnumerable<Ticket>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
-            await FindByCondition(t => ids.Contains(t.TicketId),trackChanges)
-                  .ToListAsync();
-
         public async Task<Ticket> GetTicketAsync(Guid id, bool trackChanges) =>
             await FindByCondition(t => t.TicketId.Equals(id), trackChanges)
                   .Include(t => t.Seat)

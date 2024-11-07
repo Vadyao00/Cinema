@@ -2,6 +2,7 @@
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -21,86 +22,84 @@ namespace Cinema.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ShowtimeDto> CreateShowtimeForMovieAsync(Guid genreId, Guid movieId, ShowtimeForCreationDto showtime, bool trackChanges)
+        public async Task<ApiBaseResponse> CreateShowtimeForMovieAsync(Guid genreId, Guid movieId, ShowtimeForCreationDto showtime, bool trackChanges)
         {
-            await CheckIfMovieExists(genreId, movieId, trackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movie is null)
+                return new MovieNotFoundResponse(movieId);
 
             var showtimeDb = _mapper.Map<Showtime>(showtime);
 
             _repository.Showtime.CreateShowtimeForMovie(movieId, showtimeDb);
             await _repository.SaveAsync();
 
-            var movieDb = await GetMovieModelAsync(genreId, movieId, trackChanges: false);
+            var movieDb = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movieDb is null)
+                return new MovieNotFoundResponse(movieId);
 
             showtimeDb.Movie = movieDb;
 
             var showtimeToReturn = _mapper.Map<ShowtimeDto>(showtimeDb);
-            return showtimeToReturn;
+            return new ApiOkResponse<ShowtimeDto>(showtimeToReturn);
         }
 
-        public async Task DeleteShowtimeAsync(Guid genreId, Guid movieId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteShowtimeAsync(Guid genreId, Guid movieId, Guid Id, bool trackChanges)
         {
-            await CheckIfMovieExists(genreId, movieId, trackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movie is null)
+                return new MovieNotFoundResponse(movieId);
 
-            var showtimeForMovie = await GetShowtimeForMovieAndCheckIfItExists(movieId, Id, trackChanges);
+            var showtimeForMovie = await _repository.Showtime.GetShowtimeForMovieAsync(movieId, Id, trackChanges);
+            if (showtimeForMovie is null)
+                return new ShowtimeNotFoundResponse(Id);
 
             _repository.Showtime.DeleteShowtimeForMovie(showtimeForMovie);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Showtime>(showtimeForMovie);
         }
 
-        public async Task<IEnumerable<ShowtimeDto>> GetAllShowtimesAsync(Guid genreId, Guid movieId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllShowtimesAsync(Guid genreId, Guid movieId, bool trackChanges)
         {
-            await CheckIfMovieExists(genreId, movieId, trackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movie is null)
+                return new MovieNotFoundResponse(movieId);
 
             var showtimes = await _repository.Showtime.GetAllShowtimesForMovieAsync(movieId, trackChanges);
             var showtimesDto = _mapper.Map<IEnumerable<ShowtimeDto>>(showtimes);
 
-            return showtimesDto;
+            return new ApiOkResponse<IEnumerable<ShowtimeDto>>(showtimesDto);
         }
 
-        public async Task<ShowtimeDto> GetShowtimeAsync(Guid genreId, Guid movieId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> GetShowtimeAsync(Guid genreId, Guid movieId, Guid Id, bool trackChanges)
         {
-            await CheckIfMovieExists(genreId, movieId, trackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
+            if (movie is null)
+                return new MovieNotFoundResponse(movieId);
 
-            var showtimeDb = await GetShowtimeForMovieAndCheckIfItExists(movieId, Id, trackChanges);
+            var showtimeDb = await _repository.Showtime.GetShowtimeForMovieAsync(movieId, Id, trackChanges);
+            if (showtimeDb is null)
+                return new ShowtimeNotFoundResponse(Id);
 
             var showtimeDto = _mapper.Map<ShowtimeDto>(showtimeDb);
-            return showtimeDto;
+            return 
+                new ApiOkResponse<ShowtimeDto>(showtimeDto);
         }
 
-        public async Task UpdateShowtimeAsync(Guid genreId, Guid movieId, Guid Id, ShowtimeForUpdateDto showtimeForUpdate, bool movTrackChanges, bool shwTrackChanges)
+        public async Task<ApiBaseResponse> UpdateShowtimeAsync(Guid genreId, Guid movieId, Guid Id, ShowtimeForUpdateDto showtimeForUpdate, bool movTrackChanges, bool shwTrackChanges)
         {
-            await CheckIfMovieExists(genreId, movieId, movTrackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, movTrackChanges);
+            if (movie is null)
+                return new MovieNotFoundResponse(movieId);
 
-            var showtimeEntity = await GetShowtimeForMovieAndCheckIfItExists(movieId, Id, shwTrackChanges);
+            var showtimeEntity = await _repository.Showtime.GetShowtimeForMovieAsync(movieId, Id, shwTrackChanges);
+            if (showtimeEntity is null)
+                return new ShowtimeNotFoundResponse(Id);
 
             _mapper.Map(showtimeForUpdate, showtimeEntity);
             await _repository.SaveAsync();
-        }
 
-        private async Task CheckIfMovieExists(Guid genreId, Guid movieId, bool trackChanges)
-        {
-            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
-            if (movie is null)
-                throw new MovieNotFoundException(movieId);
-        }
-
-        private async Task<Movie> GetMovieModelAsync(Guid genreId, Guid movieId, bool trackChanges)
-        {
-            var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
-            if (movie is null)
-                throw new MovieNotFoundException(movieId);
-
-            return movie;
-        }
-
-        private async Task<Showtime> GetShowtimeForMovieAndCheckIfItExists(Guid movieId, Guid id, bool trackChanges)
-        {
-            var showtimeDb = await _repository.Showtime.GetShowtimeForMovieAsync(movieId, id, trackChanges);
-            if (showtimeDb is null)
-                throw new ShowtimeNotFoundException(id);
-
-            return showtimeDb;
+            return new ApiOkResponse<Showtime>(showtimeEntity);
         }
     }
 }

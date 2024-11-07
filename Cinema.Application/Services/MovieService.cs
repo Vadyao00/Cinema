@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
-using System.ComponentModel.Design;
 
 namespace Cinema.Application.Services
 {
@@ -22,84 +21,80 @@ namespace Cinema.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<MovieDto> CreateMovieForGenreAsync(Guid genreId, MovieForCreationDto movie, bool trackChanges)
+        public async Task<ApiBaseResponse> CreateMovieForGenreAsync(Guid genreId, MovieForCreationDto movie, bool trackChanges)
         {
-            await CheckIfGenreExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
             var movieDb = _mapper.Map<Movie>(movie);
 
             _repository.Movie.CreateMovieForGenre(genreId, movieDb);
             await _repository.SaveAsync();
 
-            var genre = await GetGenreModel(genreId, trackChanges: false);
+            genre = await _repository.Genre.GetGenreAsync(genreId, false);
             movieDb.Genre = genre;
 
             var movieToReturn = _mapper.Map<MovieDto>(movieDb);
-            return movieToReturn;
+            return new ApiOkResponse<MovieDto>(movieToReturn);
         }
 
-        public async Task DeleteMovieAsync(Guid genreId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteMovieAsync(Guid genreId, Guid Id, bool trackChanges)
         {
-            await CheckIfGenreExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
-            var movieForGenre = await GetMovieForGenreAndCheckIfItExists(genreId, Id, trackChanges);
+            var movieDb = await _repository.Movie.GetMovieAsync(genreId, Id, trackChanges);
+            if (movieDb is null)
+                return new MovieNotFoundResponse(Id);
 
-            _repository.Movie.DeleteMovie(movieForGenre);
+            _repository.Movie.DeleteMovie(movieDb);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Movie>(movieDb);
         }
 
-        public async Task<IEnumerable<MovieDto>> GetAllMoviesAsync(Guid genreId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllMoviesAsync(Guid genreId, bool trackChanges)
         {
-            await CheckIfGenreExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
             var movies = await _repository.Movie.GetAllMoviesForGenreAsync(genreId, trackChanges);
             var moviesDto = _mapper.Map<IEnumerable<MovieDto>>(movies);
 
-            return moviesDto;
+            return new ApiOkResponse<IEnumerable<MovieDto>>(moviesDto);
         }
 
-        public async Task<MovieDto> GetMovieAsync(Guid genreId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> GetMovieAsync(Guid genreId, Guid Id, bool trackChanges)
         {
-            await CheckIfGenreExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
-            var movieDb = await GetMovieForGenreAndCheckIfItExists(genreId, Id, trackChanges);
+            var movieDb = await _repository.Movie.GetMovieAsync(genreId, Id, trackChanges);
+            if (movieDb is null)
+                return new MovieNotFoundResponse(Id);
 
             var movieDto = _mapper.Map<MovieDto>(movieDb);
-            return movieDto;
+            return new ApiOkResponse<MovieDto>(movieDto);
         }
 
-        public async Task UpdateMovieForGenreAsync(Guid genreId, Guid Id, MovieForUpdateDto movieForUpdate, bool genrTrackChanges, bool movTrackChanges)
+        public async Task<ApiBaseResponse> UpdateMovieForGenreAsync(Guid genreId, Guid Id, MovieForUpdateDto movieForUpdate, bool genrTrackChanges, bool movTrackChanges)
         {
-            await CheckIfGenreExists(genreId, genrTrackChanges);
-
-            var movidEntity = await GetMovieForGenreAndCheckIfItExists(genreId, Id, movTrackChanges);
-
-            _mapper.Map(movieForUpdate, movidEntity);
-            await _repository.SaveAsync();
-        }
-
-        private async Task CheckIfGenreExists(Guid genreId, bool trackChanges)
-        {
-            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, genrTrackChanges);
             if (genre is null)
-                throw new GenreNotFoundException(genreId);
-        }
+                return new GenreNotFoundResponse(genreId);
 
-        private async Task<Genre> GetGenreModel(Guid genreId, bool trackChanges)
-        {
-            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
-            if (genre is null)
-                throw new GenreNotFoundException(genreId);
-            return genre;
-        }
-
-        private async Task<Movie> GetMovieForGenreAndCheckIfItExists(Guid genreId, Guid id, bool trackChanges)
-        {
-            var movieDb = await _repository.Movie.GetMovieAsync(genreId, id, trackChanges);
+            var movieDb = await _repository.Movie.GetMovieAsync(genreId, Id, movTrackChanges);
             if (movieDb is null)
-                throw new MovieNotFoundException(id);
+                return new MovieNotFoundResponse(Id);
 
-            return movieDb;
+            _mapper.Map(movieForUpdate, movieDb);
+            await _repository.SaveAsync();
+
+            return new ApiOkResponse<Movie>(movieDb);
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.Responses;
 
 namespace Contracts.IServices
 {
     public interface ISeatService
     {
-        Task<IEnumerable<SeatDto>> GetAllSeatsAsync(bool trackChanges);
-        Task<SeatDto> GetSeatAsync(Guid Id, bool trackChanges);
-        Task<SeatDto> CreateSeatForShowtimeOrEventAsync(Guid? showtimeId, Guid? eventId, SeatForCreationDto seat, bool trackChanges);
-        Task DeleteSeatAsync(Guid Id, bool trackChanges);
-        Task UpdateSeatAsync(Guid Id, SeatForUpdateDto seatForUpdate, bool movTrackChanges);
+        Task<ApiBaseResponse> GetAllSeatsAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetSeatAsync(Guid Id, bool trackChanges);
+        Task<ApiBaseResponse> CreateSeatForShowtimeOrEventAsync(Guid? showtimeId, Guid? eventId, SeatForCreationDto seat, bool trackChanges);
+        Task<ApiBaseResponse> DeleteSeatAsync(Guid Id, bool trackChanges);
+        Task<ApiBaseResponse> UpdateSeatAsync(Guid Id, SeatForUpdateDto seatForUpdate, bool seatTrackChanges);
     }
 }

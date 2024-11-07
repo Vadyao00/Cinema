@@ -2,6 +2,7 @@
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -33,60 +34,50 @@ namespace Cinema.Application.Services
             return employeeToReturn;
         }
 
-        public async Task DeleteEmployeeAsync(Guid employeeId, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteEmployeeAsync(Guid employeeId, bool trackChanges)
         {
-            var employee = await GetEmployeeAndCheckIfItExists(employeeId, trackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
 
             _repository.Employee.DeleteEmployee(employee);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Employee>(employee);
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetAllEmployeesAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllEmployeesAsync(bool trackChanges)
         {
             var employees = await _repository.Employee.GetEmployeesAsync(trackChanges);
             var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
 
-            return employeesDto;
-
+            return new ApiOkResponse<IEnumerable<EmployeeDto>>(employeesDto);
         }
 
-        public async Task<IEnumerable<EmployeeDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<ApiBaseResponse> GetEmployeeAsync(Guid employeeId, bool trackChanges)
         {
-            if(ids is null)
-                throw new IdParametrBadRequestException();
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
 
-            var employeeEntities = await _repository.Employee.GetByIdsAsync(ids, trackChanges);
-            if(ids.Count() != employeeEntities.Count())
-                throw new CollectionByIdsBadRequestException();
-
-            var employeesToReturn = _mapper.Map<IEnumerable<EmployeeDto>>(employeeEntities);
-
-            return employeesToReturn;
-        }
-
-        public async Task<EmployeeDto> GetEmployeeAsync(Guid employeeId, bool trackChanges)
-        {
-            var employee = await GetEmployeeAndCheckIfItExists(employeeId, trackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
 
             var employeeDto = _mapper.Map<EmployeeDto>(employee);
 
-            return employeeDto;
+            return new ApiOkResponse<EmployeeDto>(employeeDto);
         }
 
-        public async Task UpdateEmployeeAsync(Guid employeeId, EmployeeForUpdateDto employeeForUpdate, bool trackChanges)
+        public async Task<ApiBaseResponse> UpdateEmployeeAsync(Guid employeeId, EmployeeForUpdateDto employeeForUpdate, bool trackChanges)
         {
-            var employeeEntity = await GetEmployeeAndCheckIfItExists(employeeId, trackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
 
-            _mapper.Map(employeeForUpdate, employeeEntity);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
+
+            _mapper.Map(employeeForUpdate, employee);
             await _repository.SaveAsync();
-        }
 
-        private async Task<Employee> GetEmployeeAndCheckIfItExists(Guid id, bool trackChanges)
-        {
-            var employee = await _repository.Employee.GetEmployeeAsync(id, trackChanges);
-            if(employee is null)
-                throw new EmployeeNotFoundException(id);
-            return employee;
+            return new ApiOkResponse<Employee>(employee);
         }
     }
 }

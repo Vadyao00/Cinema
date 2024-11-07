@@ -18,9 +18,5 @@ namespace Cinema.Persistence.Repositories
             await FindAll(trackChanges)
                   .OrderBy(a => a.Name)
                   .ToListAsync();
-
-        public async Task<IEnumerable<Actor>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
-            await FindByCondition(x => ids.Contains(x.ActorId), trackChanges)
-                  .ToListAsync();
     }
 }

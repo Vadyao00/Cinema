@@ -2,6 +2,7 @@
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -33,59 +34,50 @@ namespace Cinema.Application.Services
             return actorToReturn;
         }
 
-        public async Task DeleteActorAsync(Guid actorId, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteActorAsync(Guid actorId, bool trackChanges)
         {
-            var actor = await GetActorAndCheckIfItExists(actorId, trackChanges);
+            var actor = await _repository.Actor.GetActorAsync(actorId, trackChanges);
+
+            if (actor is null)
+                return new ActorNotFoundResponse(actorId);
 
             _repository.Actor.DeleteActor(actor);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Actor>(actor);
         }
 
-        public async Task<ActorDto> GetActorAsync(Guid actorId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetActorAsync(Guid actorId, bool trackChanges)
         {
-            var actor = await GetActorAndCheckIfItExists(actorId, trackChanges);
+            var actor = await _repository.Actor.GetActorAsync(actorId, trackChanges);
+
+            if(actor is null)
+                return new ActorNotFoundResponse(actorId);
 
             var actorDto = _mapper.Map<ActorDto>(actor);
 
-            return actorDto;
+            return new ApiOkResponse<ActorDto>(actorDto);
         }
 
-        public async Task<IEnumerable<ActorDto>> GetAllActorsAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllActorsAsync(bool trackChanges)
         {
-            var companies = await _repository.Actor.GetAllActorsAsync(trackChanges);
-            var companiesDto = _mapper.Map<IEnumerable<ActorDto>>(companies);
+            var actors = await _repository.Actor.GetAllActorsAsync(trackChanges);
+            var actorsDto = _mapper.Map<IEnumerable<ActorDto>>(actors);
 
-            return companiesDto;
+            return new ApiOkResponse<IEnumerable<ActorDto>>(actorsDto);
         }
 
-        public async Task<IEnumerable<ActorDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<ApiBaseResponse> UpdateActorAsync(Guid actorId, ActorForUpdateDto actorForUpdate, bool trackChanges)
         {
-            if (ids is null)
-                throw new IdParametrBadRequestException();
+            var actor = await _repository.Actor.GetActorAsync(actorId, trackChanges);
 
-            var actorEntities = await _repository.Actor.GetByIdsAsync(ids, trackChanges);
-            if(ids.Count() != actorEntities.Count())
-                throw new IdParametrBadRequestException();
-
-            var actorsToReturn = _mapper.Map<IEnumerable<ActorDto>>(actorEntities);
-
-            return actorsToReturn;
-        }
-
-        public async Task UpdateActorAsync(Guid actorId, ActorForUpdateDto actorForUpdate, bool trackChanges)
-        {
-            var actorEntity = await GetActorAndCheckIfItExists(actorId, trackChanges);
-
-            _mapper.Map(actorForUpdate, actorEntity);
-            await _repository.SaveAsync();
-        }
-
-        private async Task<Actor> GetActorAndCheckIfItExists(Guid id, bool trackChanges)
-        {
-            var actor = await _repository.Actor.GetActorAsync(id, trackChanges);
             if (actor is null)
-                throw new ActorNotFoundException(id);
-            return actor;
+                return new ActorNotFoundResponse(actorId);
+
+            _mapper.Map(actorForUpdate, actor);
+            await _repository.SaveAsync();
+
+            return new ApiOkResponse<Actor>(actor);
         }
     }
 }

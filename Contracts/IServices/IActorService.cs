@@ -1,14 +1,14 @@
 ﻿using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.Responses;
 
 namespace Contracts.IServices
 {
     public interface IActorService
     {
-        Task<IEnumerable<ActorDto>> GetAllActorsAsync(bool trackChanges);
-        Task<ActorDto> GetActorAsync(Guid actorId, bool trackChanges);
+        Task<ApiBaseResponse> GetAllActorsAsync(bool trackChanges);
+        Task<ApiBaseResponse> GetActorAsync(Guid actorId, bool trackChanges);
         Task<ActorDto> CreateActorAsync(ActorForCreationDto actor);
-        Task<IEnumerable<ActorDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
-        Task DeleteActorAsync(Guid actorId, bool trackChanges);
-        Task UpdateActorAsync(Guid actorId, ActorForUpdateDto actorForUpdate, bool trackChanges);
+        Task<ApiBaseResponse> DeleteActorAsync(Guid actorId, bool trackChanges);
+        Task<ApiBaseResponse> UpdateActorAsync(Guid actorId, ActorForUpdateDto actorForUpdate, bool trackChanges);
     }
 }

@@ -10,10 +10,6 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteEmployee(Employee employee) => Delete(employee);
 
-        public async Task<IEnumerable<Employee>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
-            await FindByCondition(e => ids.Contains(e.EmployeeId), trackChanges)
-                  .ToListAsync();
-
         public async Task<Employee> GetEmployeeAsync(Guid id, bool trackChanges) =>
             await FindByCondition(e => e.EmployeeId.Equals(id), trackChanges)
                   .SingleOrDefaultAsync();

@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
-using System.ComponentModel.Design;
 
 namespace Cinema.Application.Services
 {
@@ -34,59 +33,47 @@ namespace Cinema.Application.Services
             return genreToReturn;
         }
 
-        public async Task DeleteGenreAsync(Guid genreId, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteGenreAsync(Guid genreId, bool trackChanges)
         {
-            var genre = await GetGenreAndCheckIfItExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
             _repository.Genre.DeleteGenre(genre);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Genre>(genre);
         }
 
-        public async Task<IEnumerable<GenreDto>> GetAllGenresAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllGenresAsync(bool trackChanges)
         {
             var genres = await _repository.Genre.GetAllGenresAsync(trackChanges);
             var genresDto = _mapper.Map<IEnumerable<GenreDto>>(genres);
 
-            return genresDto;
+            return new ApiOkResponse<IEnumerable<GenreDto>>(genresDto);
         }
 
-        public async Task<IEnumerable<GenreDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<ApiBaseResponse> GetGenreAsync(Guid genreId, bool trackChanges)
         {
-            if (ids is null)
-                throw new IdParametrBadRequestException();
-
-            var genreEntities = await _repository.Genre.GetByIdsAsync(ids, trackChanges);
-            if (ids.Count() != genreEntities.Count())
-                throw new CollectionByIdsBadRequestException();
-
-            var genresToReturn = _mapper.Map<IEnumerable<GenreDto>>(genreEntities);
-
-            return genresToReturn;
-        }
-
-        public async Task<GenreDto> GetGenreAsync(Guid genreId, bool trackChanges)
-        {
-            var genre = await GetGenreAndCheckIfItExists(genreId, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
+            if (genre is null)
+                return new GenreNotFoundResponse(genreId);
 
             var genreDto = _mapper.Map<GenreDto>(genre);
 
-            return genreDto;
+            return new ApiOkResponse<GenreDto>(genreDto);
         }
 
-        public async Task UpdateGenreAsync(Guid genreId, GenreForUpdateDto genreForUpdate, bool trackChanges)
+        public async Task<ApiBaseResponse> UpdateGenreAsync(Guid genreId, GenreForUpdateDto genreForUpdate, bool trackChanges)
         {
-            var genreEntity = await GetGenreAndCheckIfItExists(genreId, trackChanges);
-
-            _mapper.Map(genreForUpdate, genreEntity);
-            await _repository.SaveAsync();
-        }
-
-        private async Task<Genre> GetGenreAndCheckIfItExists(Guid id, bool trackChanges)
-        {
-            var genre = await _repository.Genre.GetGenreAsync(id, trackChanges);
+            var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
             if (genre is null)
-                throw new GenreNotFoundException(id);
-            return genre;
+                return new GenreNotFoundResponse(genreId);
+
+            _mapper.Map(genreForUpdate, genre);
+            await _repository.SaveAsync();
+
+            return new ApiOkResponse<Genre>(genre);
         }
     }
 }

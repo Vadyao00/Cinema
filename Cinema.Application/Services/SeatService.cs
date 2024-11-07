@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -21,88 +21,75 @@ namespace Cinema.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<SeatDto> CreateSeatForShowtimeOrEventAsync(Guid? showtimeId, Guid? eventId, SeatForCreationDto seat, bool trackChanges)
+        public async Task<ApiBaseResponse> CreateSeatForShowtimeOrEventAsync(Guid? showtimeId, Guid? eventId, SeatForCreationDto seat, bool trackChanges)
         {
             var seatDb = _mapper.Map<Seat>(seat);
 
-            _repository.Seat.CreateSeat(eventId, showtimeId,seatDb);
+            _repository.Seat.CreateSeat(eventId, showtimeId, seatDb);
             await _repository.SaveAsync();
 
             if (showtimeId is null && eventId is not null)
             {
-                var eevent = await GetEventModelAsync((Guid)eventId);
-                seatDb.Event = eevent;
+                var eventDb = await _repository.Event.GetEventAsync((Guid)eventId, trackChanges: false);
+                if (eventDb is null)
+                    return new EventNotFoundResponse((Guid)eventId);
+                seatDb.Event = eventDb;
                 seatDb.Showtime = null;
             }
 
             if (showtimeId is not null && eventId is null)
             {
-                var showtime = await GetShowtimeModelAsync((Guid)showtimeId);
+                var showtimeDb = await _repository.Showtime.GetShowtimeAsync((Guid)showtimeId, trackChanges: false);
+                if (showtimeDb is null)
+                    return new ShowtimeNotFoundResponse((Guid)showtimeId);
                 seatDb.Event = null;
-                seatDb.Showtime = showtime;
+                seatDb.Showtime = showtimeDb;
             }
 
             var seatToReturn = _mapper.Map<SeatDto>(seatDb);
-            return seatToReturn;
+            return new ApiOkResponse<SeatDto>(seatToReturn);
         }
 
-        public async Task DeleteSeatAsync(Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteSeatAsync(Guid Id, bool trackChanges)
         {
-            var seat = await GetSeatForEventOrShowtimeAndCheckIfItExists(Id, trackChanges);
+            var seatDb = await _repository.Seat.GetSeatAsync(Id, trackChanges);
+            if (seatDb is null)
+                return new SeatNotFoundResponse(Id);
 
-            _repository.Seat.DeleteSeat(seat);
+            _repository.Seat.DeleteSeat(seatDb);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Seat>(seatDb);
         }
 
-        public async Task<IEnumerable<SeatDto>> GetAllSeatsAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllSeatsAsync(bool trackChanges)
         {
             var seats = await _repository.Seat.GetAllSeatsAsync(trackChanges);
             var seatsDto = _mapper.Map<IEnumerable<SeatDto>>(seats);
 
-            return seatsDto;
+            return new ApiOkResponse<IEnumerable<SeatDto>>(seatsDto);
         }
 
-        public async Task<SeatDto> GetSeatAsync(Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> GetSeatAsync(Guid Id, bool trackChanges)
         {
-            var seatDb = await GetSeatForEventOrShowtimeAndCheckIfItExists(Id, trackChanges);
+            var seatDb = await _repository.Seat.GetSeatAsync(Id, trackChanges);
+            if (seatDb is null)
+                return new SeatNotFoundResponse(Id);
 
             var seatDto = _mapper.Map<SeatDto>(seatDb);
-            return seatDto;
+            return new ApiOkResponse<SeatDto>(seatDto);
         }
 
-        public async Task UpdateSeatAsync(Guid Id, SeatForUpdateDto seatForUpdate, bool movTrackChanges)
+        public async Task<ApiBaseResponse> UpdateSeatAsync(Guid Id, SeatForUpdateDto seatForUpdate, bool seatTrackChanges)
         {
-            var seatEntity = await GetSeatForEventOrShowtimeAndCheckIfItExists(Id, movTrackChanges);
-
-            _mapper.Map(seatForUpdate, seatEntity);
-            await _repository.SaveAsync();
-        }
-
-        private async Task<Seat> GetSeatForEventOrShowtimeAndCheckIfItExists(Guid id, bool trackChanges)
-        {
-            var seatDb = await _repository.Seat.GetSeatAsync(id, trackChanges);
+            var seatDb = await _repository.Seat.GetSeatAsync(Id, seatTrackChanges);
             if (seatDb is null)
-                throw new SeatNotFoundException(id);
+                return new SeatNotFoundResponse(Id);
 
-            return seatDb;
-        }
+            _mapper.Map(seatForUpdate, seatDb);
+            await _repository.SaveAsync();
 
-        private async Task<Showtime> GetShowtimeModelAsync(Guid showtimeId)
-        {
-            var showtimeDb = await _repository.Showtime.GetShowtimeAsync(showtimeId, trackChanges: false);
-            if(showtimeDb is null)
-                throw new ShowtimeNotFoundException(showtimeId);
-
-            return showtimeDb;
-        }
-
-        private async Task<Event> GetEventModelAsync(Guid eventId)
-        {
-            var eventDb = await _repository.Event.GetEventAsync(eventId, trackChanges: false);
-            if (eventDb is null)
-                throw new EventNotFoundException(eventId);
-
-            return eventDb;
+            return new ApiOkResponse<Seat>(seatDb);
         }
     }
 }

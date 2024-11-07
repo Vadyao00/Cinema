@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
@@ -33,60 +33,47 @@ namespace Cinema.Application.Services
             return eventToReturn;
         }
 
-        public async Task DeleteEventAsync(Guid eventId, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteEventAsync(Guid eventId, bool trackChanges)
         {
-            var eevent = await GetEventAndCheckIfItExists(eventId, trackChanges);
+            var eevent = await _repository.Event.GetEventAsync(eventId, trackChanges);
+            if (eevent is null)
+                return new EventNotFoundResponse(eventId);
 
             _repository.Event.DeleteEvent(eevent);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<Event>(eevent);
         }
 
-        public async Task<IEnumerable<EventDto>> GetAllEventsAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllEventsAsync(bool trackChanges)
         {
             var events = await _repository.Event.GetAllEventsAsync(trackChanges);
             var eventsDto = _mapper.Map<IEnumerable<EventDto>>(events);
 
-            return eventsDto;
+            return new ApiOkResponse<IEnumerable<EventDto>>(eventsDto);
         }
 
-        public async Task<IEnumerable<EventDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<ApiBaseResponse> GetEventAsync(Guid eventId, bool trackChanges)
         {
-            if(ids is null)
-                throw new IdParametrBadRequestException();
-
-            var eventEntities = await _repository.Event.GetByIdsAsync(ids, trackChanges);
-            if(ids.Count() != eventEntities.Count())
-                throw new CollectionByIdsBadRequestException();
-
-            var eventsToReturn = _mapper.Map<IEnumerable<EventDto>>(eventEntities);
-
-            return eventsToReturn;
-        }
-
-        public async Task<EventDto> GetEventAsync(Guid eventId, bool trackChanges)
-        {
-            var eevent = await GetEventAndCheckIfItExists(eventId, trackChanges);
+            var eevent = await _repository.Event.GetEventAsync(eventId, trackChanges);
+            if (eevent is null)
+                return new EventNotFoundResponse(eventId);
 
             var eventDto = _mapper.Map<EventDto>(eevent);
 
-            return eventDto;
-
+            return new ApiOkResponse<EventDto>(eventDto);
         }
 
-        public async Task UpdateEventAsync(Guid eventId, EventForUpdateDto eventForUpdate, bool trackChanges)
+        public async Task<ApiBaseResponse> UpdateEventAsync(Guid eventId, EventForUpdateDto eventForUpdate, bool trackChanges)
         {
-            var eventEntity = await GetEventAndCheckIfItExists(eventId, trackChanges);
-
-            _mapper.Map(eventForUpdate, eventEntity);
-            await _repository.SaveAsync();
-        }
-
-        private async Task<Event> GetEventAndCheckIfItExists(Guid id, bool trackChanges)
-        {
-            var eevent = await _repository.Event.GetEventAsync(id, trackChanges);
+            var eevent = await _repository.Event.GetEventAsync(eventId, trackChanges);
             if (eevent is null)
-                throw new EventNotFoundException(id);
-            return eevent;
+                return new EventNotFoundResponse(eventId);
+
+            _mapper.Map(eventForUpdate, eevent);
+            await _repository.SaveAsync();
+
+            return new ApiOkResponse<Event>(eevent);
         }
     }
 }

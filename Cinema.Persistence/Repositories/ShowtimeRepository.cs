@@ -20,10 +20,6 @@ namespace Cinema.Persistence.Repositories
                   .OrderBy(s => s.StartTime)
                   .ToListAsync();
 
-        public async Task<IEnumerable<Showtime>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
-            await FindByCondition(s => ids.Contains(s.ShowtimeId), trackChanges)
-                  .ToListAsync();
-
         public async Task<Showtime> GetShowtimeForMovieAsync(Guid movieId, Guid id, bool trackChanges) =>
             await FindByCondition(s => s.ShowtimeId.Equals(id) && s.MovieId.Equals(movieId), trackChanges)
                   .Include(s => s.Movie)

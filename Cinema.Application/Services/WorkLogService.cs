@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
+using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
 using Contracts.IServices;
-using System.Net.Sockets;
 
 namespace Cinema.Application.Services
 {
@@ -22,79 +21,82 @@ namespace Cinema.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<WorkLogDto> CreateWorkLogForEmployeeAsync(Guid employeeId, WorkLogForCreationDto workLog, bool trackChanges)
+        public async Task<ApiBaseResponse> CreateWorkLogForEmployeeAsync(Guid employeeId, WorkLogForCreationDto workLog, bool trackChanges)
         {
-            await CheckIfEmployeeExists(employeeId, trackChanges);
+            var employeee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+            if (employeee is null)
+                return new EmployeeNotFoundResponse(employeeId);
 
             var workLogDb = _mapper.Map<WorkLog>(workLog);
 
             _repository.WorkLog.CreateWorkLogForEmployee(employeeId, workLogDb);
             await _repository.SaveAsync();
 
-            var employee = await GetEmployeeModel(employeeId, trackChanges: false);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
             workLogDb.Employee = employee;
 
             var workLogToReturn = _mapper.Map<WorkLogDto>(workLogDb);
-            return workLogToReturn;
+            return new ApiOkResponse<WorkLogDto>(workLogToReturn);
         }
 
-        public async Task DeleteWorkLogForEmployeeAsync(Guid employeeId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> DeleteWorkLogForEmployeeAsync(Guid employeeId, Guid Id, bool trackChanges)
         {
-            var workLog = await GetWorkLogForEmployeeAndCheckIfItExists(employeeId, Id, trackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
+
+            var workLog = await _repository.WorkLog.GetWorkLogForEmployeeAsync(employeeId, Id, trackChanges);
+            if (workLog is null)
+                return new WorkLogNotFoundResponse(Id);
 
             _repository.WorkLog.DeleteWorkLog(workLog);
             await _repository.SaveAsync();
+
+            return new ApiOkResponse<WorkLog>(workLog);
         }
 
-        public async Task<IEnumerable<WorkLogDto>> GetAllWorkLogsForEmployeeAsync(Guid employeeId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllWorkLogsForEmployeeAsync(Guid employeeId, bool trackChanges)
         {
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
+
             var workLogs = await _repository.WorkLog.GetAllWorkLogsForEmployeeAsync(employeeId, trackChanges);
             var workLogsDto = _mapper.Map<IEnumerable<WorkLogDto>>(workLogs);
 
-            return workLogsDto;
+            return new ApiOkResponse<IEnumerable<WorkLogDto>>(workLogsDto);
         }
 
-        public async Task<WorkLogDto> GetWorkLogForEmployeeAsync(Guid employeeId, Guid Id, bool trackChanges)
+        public async Task<ApiBaseResponse> GetWorkLogForEmployeeAsync(Guid employeeId, Guid Id, bool trackChanges)
         {
-            var workLogDb = await GetWorkLogForEmployeeAndCheckIfItExists(employeeId, Id, trackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
+
+            var workLogDb = await _repository.WorkLog.GetWorkLogForEmployeeAsync(employeeId, Id, trackChanges);
+            if (workLogDb is null)
+                return new WorkLogNotFoundResponse(Id);
 
             var workLogDto = _mapper.Map<WorkLogDto>(workLogDb);
-            return workLogDto;
+            return new ApiOkResponse<WorkLogDto>(workLogDto);
         }
 
-        public async Task UpdateWorkLogAsync(Guid employeeId, Guid Id, WorkLogForUpdateDto workLogForUpdate, bool empTrackChanges, bool wrkTrackChanges)
+        public async Task<ApiBaseResponse> UpdateWorkLogAsync(Guid employeeId, Guid Id, WorkLogForUpdateDto workLogForUpdate, bool empTrackChanges, bool wrkTrackChanges)
         {
-            await CheckIfEmployeeExists(employeeId, empTrackChanges);
+            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, empTrackChanges);
+            if (employee is null)
+                return new EmployeeNotFoundResponse(employeeId);
 
-            var workLogEntity = await GetWorkLogForEmployeeAndCheckIfItExists(employeeId, Id, wrkTrackChanges);
+            var workLogEntity = await _repository.WorkLog.GetWorkLogForEmployeeAsync(employeeId, Id, wrkTrackChanges);
+            if (workLogEntity is null)
+                return new WorkLogNotFoundResponse(Id);
 
             _mapper.Map(workLogForUpdate, workLogEntity);
             await _repository.SaveAsync();
-        }
 
-        private async Task CheckIfEmployeeExists(Guid employeeId, bool trackChanges)
-        {
-            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
-            if (employee is null)
-                throw new EmployeeNotFoundException(employeeId);
-        }
-
-        private async Task<Employee> GetEmployeeModel(Guid employeeId, bool trackChanges)
-        {
-            var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
-            if (employee is null)
-                throw new EmployeeNotFoundException(employeeId);
-
-            return employee;
-        }
-
-        private async Task<WorkLog> GetWorkLogForEmployeeAndCheckIfItExists(Guid employeeId, Guid id, bool trackChanges)
-        {
-            var workLogDb = await _repository.WorkLog.GetWorkLogForEmployeeAsync(employeeId, id, trackChanges);
-            if (workLogDb is null)
-                throw new WorkLogNotFoundException(id);
-
-            return workLogDb;
+            return new ApiOkResponse<WorkLog>(workLogEntity);
         }
     }
 }

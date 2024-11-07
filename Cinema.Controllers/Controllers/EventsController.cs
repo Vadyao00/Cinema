@@ -1,13 +1,15 @@
-﻿using Cinema.Controllers.Filters;
+﻿using Cinema.Controllers.Extensions;
+using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/events")]
-    public class EventsController : Controller
+    public class EventsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
 
@@ -16,7 +18,11 @@ namespace Cinema.Controllers.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEvents()
         {
-            var events = await _service.Event.GetAllEventsAsync(trackChanges: false);
+            var baseResult = await _service.Event.GetAllEventsAsync(trackChanges: false);
+            if(!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var events = baseResult.GetResult<IEnumerable<EventDto>>();
 
             return Ok(events);
         }
@@ -24,7 +30,11 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "EventById")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
-            var eevent = await _service.Event.GetEventAsync(id, trackChanges: false);
+            var baseResult = await _service.Event.GetEventAsync(id, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var eevent = baseResult.GetResult<EventDto>();
 
             return Ok(eevent);
         }
@@ -41,7 +51,9 @@ namespace Cinema.Controllers.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEvent(Guid id)
         {
-            await _service.Event.DeleteEventAsync(id, trackChanges: false);
+            var baseResult = await _service.Event.DeleteEventAsync(id, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }
@@ -50,7 +62,9 @@ namespace Cinema.Controllers.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] EventForUpdateDto actor)
         {
-            await _service.Event.UpdateEventAsync(id, actor, trackChanges: true);
+            var baseResult = await _service.Event.UpdateEventAsync(id, actor, trackChanges: true);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }

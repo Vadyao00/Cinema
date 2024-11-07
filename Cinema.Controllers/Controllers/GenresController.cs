@@ -1,4 +1,5 @@
-﻿using Cinema.Controllers.Filters;
+﻿using Cinema.Controllers.Extensions;
+using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/genres")]
-    public class GenresController : Controller
+    public class GenresController : ApiControllerBase
     {
         private readonly IServiceManager _service;
 
@@ -16,7 +17,11 @@ namespace Cinema.Controllers.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGenres()
         {
-            var genres = await _service.Genre.GetAllGenresAsync(trackChanges: false);
+            var baseResult = await _service.Genre.GetAllGenresAsync(trackChanges: false);
+            if(!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var genres = baseResult.GetResult<IEnumerable<GenreDto>>();
 
             return Ok(genres);
         }
@@ -24,7 +29,11 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GenreById")]
         public async Task<IActionResult> GetGenre(Guid id)
         {
-            var genre = await _service.Genre.GetGenreAsync(id, trackChanges: false);
+            var baseResult = await _service.Genre.GetGenreAsync(id, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var genre = baseResult.GetResult<GenreDto>();
 
             return Ok(genre);
         }
@@ -41,7 +50,9 @@ namespace Cinema.Controllers.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteGenre(Guid id)
         {
-            await _service.Genre.DeleteGenreAsync(id, trackChanges: false);
+            var baseResult = await _service.Genre.DeleteGenreAsync(id, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }
@@ -50,7 +61,9 @@ namespace Cinema.Controllers.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateGenre(Guid id, [FromBody] GenreForUpdateDto genre)
         {
-            await _service.Genre.UpdateGenreAsync(id, genre, trackChanges: true);
+            var baseResult = await _service.Genre.UpdateGenreAsync(id, genre, trackChanges: true);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }

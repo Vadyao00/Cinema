@@ -1,13 +1,16 @@
-﻿using Cinema.Controllers.Filters;
+﻿using Cinema.Controllers.Extensions;
+using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.Responses;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/actors")]
-    public class ActorsController : Controller
+    public class ActorsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
 
@@ -16,7 +19,9 @@ namespace Cinema.Controllers.Controllers
         [HttpGet]
         public async Task<IActionResult> GetActors()
         {
-            var actors = await _service.Actor.GetAllActorsAsync(trackChanges: false);
+            var baseResult = await _service.Actor.GetAllActorsAsync(trackChanges: false);
+
+            var actors = baseResult.GetResult<IEnumerable<ActorDto>>();
 
             return Ok(actors);
         }
@@ -24,7 +29,11 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "ActorById")]
         public async Task<IActionResult> GetActor(Guid id)
         {
-            var actor = await _service.Actor.GetActorAsync(id, trackChanges: false);
+            var baseResult = await _service.Actor.GetActorAsync(id, trackChanges: false);
+            if(!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var actor = baseResult.GetResult<ActorDto>();
 
             return Ok(actor);
         }
@@ -41,7 +50,9 @@ namespace Cinema.Controllers.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteActor(Guid id)
         {
-            await _service.Actor.DeleteActorAsync(id, trackChanges: false);
+            var baseResult = await _service.Actor.DeleteActorAsync(id, trackChanges: false);
+            if(!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }
@@ -50,7 +61,9 @@ namespace Cinema.Controllers.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateActor(Guid id, [FromBody] ActorForUpdateDto actor)
         {
-            await _service.Actor.UpdateActorAsync(id, actor , trackChanges: true);
+            var baseResult = await _service.Actor.UpdateActorAsync(id, actor , trackChanges: true);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             return NoContent();
         }

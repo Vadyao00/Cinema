@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Cinema.Controllers.Filters;
+using NLog;
+using Cinema.LoggerService;
 
 namespace Cinema.API
 {
@@ -22,15 +24,16 @@ namespace Cinema.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
             ConfigureServices(builder.Services,builder.Configuration);
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                //app.UseMigrationsEndPoint();
-            }
-            else
+            var logger = app.Services.GetRequiredService<ILoggerManager>();
+            app.ConfigureExceptionHandler(logger);
+
+            if (app.Environment.IsProduction())
             {
                 app.UseHsts();
             }
@@ -72,6 +75,7 @@ namespace Cinema.API
 
         public static void ConfigureApp(IApplicationBuilder app)
         {
+
             app.UseHttpsRedirection();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
