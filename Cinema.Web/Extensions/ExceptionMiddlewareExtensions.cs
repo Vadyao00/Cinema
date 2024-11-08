@@ -2,7 +2,6 @@
 using Cinema.Domain.Exceptions;
 using Cinema.LoggerService;
 using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 
 namespace Cinema.API.Extensions
 {

@@ -47,6 +47,11 @@ namespace Cinema.API
 
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.ConfigureCors();
 
             services.AddScoped<ValidationFilterAttribute>();

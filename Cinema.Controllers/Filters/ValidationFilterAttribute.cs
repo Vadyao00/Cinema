@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Cinema.Domain.DataTransferObjects;
 
 namespace Cinema.Controllers.Filters
 {
@@ -21,6 +22,16 @@ namespace Cinema.Controllers.Filters
             {
                 context.Result = new BadRequestObjectResult($"Object is null. Controller: {controller}, action: {action}");
                 return;
+            }
+            if (param is EventForManipulationDto eevent)
+            {
+                if (eevent.StartTime >= eevent.EndTime)
+                    context.Result = new BadRequestObjectResult($"Object has incorrect parameters. StartTime must be less than EndTime. Controller: {controller}, action: {action}");
+            }
+            if (param is ShowtimeForManipulationDto showtime)
+            {
+                if (showtime.StartTime >= showtime.EndTime)
+                    context.Result = new BadRequestObjectResult($"Object has incorrect parameters. StartTime must be less than EndTime. Controller: {controller}, action: {action}");
             }
             if (!context.ModelState.IsValid)
                 context.Result = new UnprocessableEntityObjectResult(context.ModelState);

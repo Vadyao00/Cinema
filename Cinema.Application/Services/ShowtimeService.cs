@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Cinema.Domain.Exceptions;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
