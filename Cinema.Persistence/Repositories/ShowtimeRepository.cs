@@ -17,7 +17,9 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Showtime>> GetAllShowtimesForMovieAsync(ShowtimeParameters showtimeParameters, Guid movieId, bool trackChanges)
         {
-            var showtimes = await FindByCondition(s => s.MovieId.Equals(movieId), trackChanges)
+            var showtimes = await FindByCondition(s => s.MovieId.Equals(movieId)
+                                                  && s.TicketPrice >= showtimeParameters.MinTicketPrice && s.TicketPrice <= showtimeParameters.MaxTicketPrice
+                                                  && s.StartTime >= showtimeParameters.StartTime && s.EndTime <= showtimeParameters.EndTime, trackChanges)
                   .Include(s => s.Movie)
                   .OrderBy(s => s.StartTime)
                   .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)

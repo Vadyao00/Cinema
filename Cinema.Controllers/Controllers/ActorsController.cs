@@ -20,6 +20,8 @@ namespace Cinema.Controllers.Controllers
         public async Task<IActionResult> GetActors([FromQuery]ActorParameters actorParameters)
         {
             var baseResult = await _service.Actor.GetAllActorsAsync(actorParameters, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             var (actors, metaData) = baseResult.GetResult<(IEnumerable<ActorDto>, MetaData)>();
 

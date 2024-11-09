@@ -65,6 +65,9 @@ namespace Cinema.Application.Services
 
         public async Task<ApiBaseResponse> GetAllSeatsAsync(SeatParameters seatParameters, bool trackChanges)
         {
+            if(!seatParameters.ValidSeatNumber)
+                return new SeatNumberBadRequestResponse();
+
             var seatsWithMetaData = await _repository.Seat.GetAllSeatsAsync(seatParameters, trackChanges);
             var seatsDto = _mapper.Map<IEnumerable<SeatDto>>(seatsWithMetaData);
 

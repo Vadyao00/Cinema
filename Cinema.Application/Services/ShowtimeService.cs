@@ -61,6 +61,11 @@ namespace Cinema.Application.Services
 
         public async Task<ApiBaseResponse> GetAllShowtimesAsync(ShowtimeParameters showtimeParameters, Guid genreId, Guid movieId, bool trackChanges)
         {
+            if (!showtimeParameters.ValidTicketPriceRange)
+                return new MaxTicketPriceBadRequestPesponse();
+            if (!showtimeParameters.ValidTimeRange)
+                return new TimeRangeBadRequestResponse();
+
             var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
             if (movie is null)
                 return new MovieNotFoundResponse(movieId);

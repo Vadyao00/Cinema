@@ -13,7 +13,8 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Event>> GetAllEventsAsync(EventParameters eventParameters, bool trackChanges)
         {
-            var events = await FindAll(trackChanges)
+            var events = await FindByCondition(e => e.TicketPrice >= eventParameters.MinTicketPrice && e.TicketPrice <= eventParameters.MaxTicketPrice
+                                               && e.StartTime >= eventParameters.StartTime && e.EndTime <= eventParameters.EndTime, trackChanges)
                   .OrderBy(e => e.StartTime)
                   .Skip((eventParameters.PageNumber - 1) * eventParameters.PageSize)
                   .Take(eventParameters.PageSize)

@@ -20,6 +20,8 @@ namespace Cinema.Controllers.Controllers
         public async Task<IActionResult> GetGenres([FromQuery]GenreParameters genreParameters)
         {
             var baseResult = await _service.Genre.GetAllGenresAsync(genreParameters, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             var (genres, metaData) = baseResult.GetResult <(IEnumerable<GenreDto>, MetaData)>();
 

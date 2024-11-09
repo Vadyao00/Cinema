@@ -17,7 +17,8 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Ticket>> GetAllTicketsForSeatAsync(TicketParameters ticketParameters, Guid seatId, bool trackChanges)
         {
-            var tickets = await FindByCondition(t => t.SeatId.Equals(seatId), trackChanges)
+            var tickets = await FindByCondition(t => t.SeatId.Equals(seatId)
+                                                && t.Seat.SeatNumber >= ticketParameters.MinSeatNumber && t.Seat.SeatNumber <= ticketParameters.MaxSeatNumber, trackChanges)
                   .Include(t => t.Seat)
                   .OrderBy(t => t.TicketId)
                   .Skip((ticketParameters.PageNumber - 1) * ticketParameters.PageSize)

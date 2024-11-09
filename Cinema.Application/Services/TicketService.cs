@@ -56,6 +56,9 @@ namespace Cinema.Application.Services
 
         public async Task<ApiBaseResponse> GetAllTicketsForSeatAsync(TicketParameters ticketParameters, Guid seatId, bool trackChanges)
         {
+            if(!ticketParameters.ValidSeatNumber)
+                return new SeatNumberBadRequestResponse();
+
             var seat = await _repository.Seat.GetSeatAsync(seatId, trackChanges);
             if (seat is null)
                 return new SeatNotFoundResponse(seatId);

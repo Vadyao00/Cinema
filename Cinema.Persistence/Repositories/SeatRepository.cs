@@ -18,7 +18,7 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Seat>> GetAllSeatsAsync(SeatParameters seatParameters, bool trackChanges)
         {
-            var seats = await FindAll(trackChanges)
+            var seats = await FindByCondition(s => s.SeatNumber >= seatParameters.MinSeatNumber && s.SeatNumber <= seatParameters.MaxSeatNumber,trackChanges)
                   .Include(s => s.Event)
                   .Include(s => s.Showtime)
                   .Include(s => s.Showtime!.Movie)

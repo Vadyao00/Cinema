@@ -20,6 +20,8 @@ namespace Cinema.Controllers.Controllers
         public async Task<IActionResult> GetEmployees([FromQuery]EmployeeParameters employeeParameters)
         {
             var baseResult = await _service.Employee.GetAllEmployeesAsync(employeeParameters, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             var (employees, metaData) = baseResult.GetResult<(IEnumerable<EmployeeDto>, MetaData)>();
 

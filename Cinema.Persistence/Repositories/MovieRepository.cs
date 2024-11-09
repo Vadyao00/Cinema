@@ -17,7 +17,8 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Movie>> GetAllMoviesForGenreAsync(MovieParameters movieParameters, Guid genreId, bool trackChanges)
         {
-            var movies = await FindByCondition(m => m.GenreId.Equals(genreId), trackChanges)
+            var movies = await FindByCondition(m => m.GenreId.Equals(genreId)
+                                               && m.AgeRestriction >= movieParameters.MinAgeRestriction && m.AgeRestriction <= movieParameters.MaxAgeRestriction, trackChanges)
                   .Include(m => m.Genre)
                   .OrderBy(m => m.Title)
                   .Skip((movieParameters.PageNumber - 1) * movieParameters.PageSize)

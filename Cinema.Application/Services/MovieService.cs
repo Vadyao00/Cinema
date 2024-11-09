@@ -58,6 +58,9 @@ namespace Cinema.Application.Services
 
         public async Task<ApiBaseResponse> GetAllMoviesAsync(MovieParameters movieParameters, Guid genreId, bool trackChanges)
         {
+            if(!movieParameters.ValidAgeRestriction)
+                return new AgeRestrictionBadRequestResponse();
+
             var genre = await _repository.Genre.GetGenreAsync(genreId, trackChanges);
             if (genre is null)
                 return new GenreNotFoundResponse(genreId);

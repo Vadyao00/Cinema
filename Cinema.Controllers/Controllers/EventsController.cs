@@ -20,6 +20,8 @@ namespace Cinema.Controllers.Controllers
         public async Task<IActionResult> GetEvents([FromQuery]EventParameters eventParameters)
         {
             var baseResult = await _service.Event.GetAllEventsAsync(eventParameters, trackChanges: false);
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
 
             var (events, metaData) = baseResult.GetResult<(IEnumerable<EventDto>, MetaData)>();
 

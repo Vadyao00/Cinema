@@ -48,6 +48,11 @@ namespace Cinema.Application.Services
 
         public async Task<ApiBaseResponse> GetAllEventsAsync(EventParameters eventParameters, bool trackChanges)
         {
+            if (!eventParameters.ValidTicketPriceRange)
+                return new MaxTicketPriceBadRequestPesponse();
+            if(!eventParameters.ValidTimeRange)
+                return new TimeRangeBadRequestResponse();
+
             var eventsWithMetaData = await _repository.Event.GetAllEventsAsync(eventParameters, trackChanges);
             var eventsDto = _mapper.Map<IEnumerable<EventDto>>(eventsWithMetaData);
 
