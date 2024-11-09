@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -58,16 +59,16 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<Showtime>(showtimeForMovie);
         }
 
-        public async Task<ApiBaseResponse> GetAllShowtimesAsync(Guid genreId, Guid movieId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllShowtimesAsync(ShowtimeParameters showtimeParameters, Guid genreId, Guid movieId, bool trackChanges)
         {
             var movie = await _repository.Movie.GetMovieAsync(genreId, movieId, trackChanges);
             if (movie is null)
                 return new MovieNotFoundResponse(movieId);
 
-            var showtimes = await _repository.Showtime.GetAllShowtimesForMovieAsync(movieId, trackChanges);
-            var showtimesDto = _mapper.Map<IEnumerable<ShowtimeDto>>(showtimes);
+            var showtimesWithMetaData = await _repository.Showtime.GetAllShowtimesForMovieAsync(showtimeParameters, movieId, trackChanges);
+            var showtimesDto = _mapper.Map<IEnumerable<ShowtimeDto>>(showtimesWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<ShowtimeDto>>(showtimesDto);
+            return new ApiOkResponse<(IEnumerable<ShowtimeDto>, MetaData)>((showtimesDto, showtimesWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetShowtimeAsync(Guid genreId, Guid movieId, Guid Id, bool trackChanges)

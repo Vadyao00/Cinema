@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -53,16 +54,16 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<Ticket>(ticket);
         }
 
-        public async Task<ApiBaseResponse> GetAllTicketsForSeatAsync(Guid seatId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllTicketsForSeatAsync(TicketParameters ticketParameters, Guid seatId, bool trackChanges)
         {
             var seat = await _repository.Seat.GetSeatAsync(seatId, trackChanges);
             if (seat is null)
                 return new SeatNotFoundResponse(seatId);
 
-            var tickets = await _repository.Ticket.GetAllTicketsForSeatAsync(seatId, trackChanges);
-            var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(tickets);
+            var ticketsWithMetaData = await _repository.Ticket.GetAllTicketsForSeatAsync(ticketParameters, seatId, trackChanges);
+            var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(ticketsWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<TicketDto>>(ticketsDto);
+            return new ApiOkResponse<(IEnumerable<TicketDto>, MetaData)>((ticketsDto, ticketsWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetTicketAsync(Guid seatId, Guid Id, bool trackChanges)

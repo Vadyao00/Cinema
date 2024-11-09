@@ -1,8 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -15,13 +17,15 @@ namespace Cinema.Controllers.Controllers
         public ShowtimesController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetShowtimesForMovie(Guid genreId, Guid movieId)
+        public async Task<IActionResult> GetShowtimesForMovie([FromQuery]ShowtimeParameters showtimeParameters, Guid genreId, Guid movieId)
         {
-            var baseResult = await _service.Showtime.GetAllShowtimesAsync(genreId, movieId, trackChanges: false);
+            var baseResult = await _service.Showtime.GetAllShowtimesAsync(showtimeParameters, genreId, movieId, trackChanges: false);
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
-            var showtimes = baseResult.GetResult<IEnumerable<ShowtimeDto>>();
+            var (showtimes, metaData) = baseResult.GetResult<(IEnumerable<ShowtimeDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(showtimes);
         }

@@ -1,4 +1,5 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,9 +15,17 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(e => e.EmployeeId.Equals(id), trackChanges)
                   .SingleOrDefaultAsync();
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<PagedList<Employee>> GetEmployeesAsync(EmployeeParameters employeeParameters, bool trackChanges)
+        {
+            var employees = await FindAll(trackChanges)
                   .OrderBy(e => e.Name)
+                  .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
+                  .Take(employeeParameters.PageSize)
                   .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<Employee>(employees, count, employeeParameters.PageNumber, employeeParameters.PageSize);
+        }
     }
 }

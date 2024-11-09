@@ -1,8 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -15,13 +17,13 @@ namespace Cinema.Controllers.Controllers
         public GenresController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetGenres()
+        public async Task<IActionResult> GetGenres([FromQuery]GenreParameters genreParameters)
         {
-            var baseResult = await _service.Genre.GetAllGenresAsync(trackChanges: false);
-            if(!baseResult.Suссess)
-                return ProccessError(baseResult);
+            var baseResult = await _service.Genre.GetAllGenresAsync(genreParameters, trackChanges: false);
 
-            var genres = baseResult.GetResult<IEnumerable<GenreDto>>();
+            var (genres, metaData) = baseResult.GetResult <(IEnumerable<GenreDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(genres);
         }

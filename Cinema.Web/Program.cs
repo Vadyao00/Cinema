@@ -1,9 +1,6 @@
-using Cinema.API.Data;
 using Cinema.API.Extensions;
 using Cinema.Controllers;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Cinema.Controllers.Filters;

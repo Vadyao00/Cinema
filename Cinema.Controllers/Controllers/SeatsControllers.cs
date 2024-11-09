@@ -1,8 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -15,13 +17,15 @@ namespace Cinema.Controllers.Controllers
         public SeatsControllers(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetSeats()
+        public async Task<IActionResult> GetSeats([FromQuery]SeatParameters seatParameters)
         {
-            var baseResult = await _service.Seat.GetAllSeatsAsync(trackChanges: false);
+            var baseResult = await _service.Seat.GetAllSeatsAsync(seatParameters, trackChanges: false);
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
-            var seats = baseResult.GetResult<IEnumerable<SeatDto>>();
+            var (seats, metaData) = baseResult.GetResult<(IEnumerable<SeatDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(seats);
         }

@@ -15,7 +15,8 @@ namespace Cinema.API.Extensions
                 options.AddPolicy("CorsPolicy", builder =>
                 builder.AllowAnyHeader().
                 AllowAnyOrigin().
-                AllowAnyMethod());
+                AllowAnyMethod().
+                WithExposedHeaders("X-Pagination"));
             });
 
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>

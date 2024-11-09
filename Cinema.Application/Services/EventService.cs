@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -45,12 +46,12 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<Event>(eevent);
         }
 
-        public async Task<ApiBaseResponse> GetAllEventsAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllEventsAsync(EventParameters eventParameters, bool trackChanges)
         {
-            var events = await _repository.Event.GetAllEventsAsync(trackChanges);
-            var eventsDto = _mapper.Map<IEnumerable<EventDto>>(events);
+            var eventsWithMetaData = await _repository.Event.GetAllEventsAsync(eventParameters, trackChanges);
+            var eventsDto = _mapper.Map<IEnumerable<EventDto>>(eventsWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<EventDto>>(eventsDto);
+            return new ApiOkResponse<(IEnumerable<EventDto>, MetaData)>((eventsDto, eventsWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetEventAsync(Guid eventId, bool trackChanges)

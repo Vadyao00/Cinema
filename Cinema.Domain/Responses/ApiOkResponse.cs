@@ -1,8 +1,12 @@
-﻿namespace Cinema.Domain.Responses
+﻿using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
+
+namespace Cinema.Domain.Responses
 {
     public sealed class ApiOkResponse<TResult> : ApiBaseResponse
     {
         public TResult Result { get; set; }
+
         public ApiOkResponse(TResult result) : base(true)
         {
             Result = result;

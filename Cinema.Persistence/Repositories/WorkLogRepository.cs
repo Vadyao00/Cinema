@@ -1,4 +1,5 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +15,19 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteWorkLog(WorkLog workLog) => Delete(workLog);
 
-        public async Task<IEnumerable<WorkLog>> GetAllWorkLogsForEmployeeAsync(Guid employeeId, bool trackChanges) =>
-            await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
+        public async Task<PagedList<WorkLog>> GetAllWorkLogsForEmployeeAsync(WorkLogParameters workLogParameters, Guid employeeId, bool trackChanges)
+        {
+            var workLogs = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
                   .Include(w => w.Employee)
                   .OrderBy(w => w.WorkHours)
+                  .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)
+                  .Take(workLogParameters.PageSize)
                   .ToListAsync();
+
+            var count = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges).CountAsync();
+
+            return new PagedList<WorkLog>(workLogs, count, workLogParameters.PageNumber, workLogParameters.PageSize);
+        }
 
         public async Task<WorkLog> GetWorkLogForEmployeeAsync(Guid employeeId, Guid id, bool trackChanges) =>
             await FindByCondition(w => w.WorkLogId.Equals(id) && w.EmployeeId.Equals(employeeId), trackChanges)

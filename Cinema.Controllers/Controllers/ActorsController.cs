@@ -1,10 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
-using Cinema.Domain.Responses;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -17,11 +17,13 @@ namespace Cinema.Controllers.Controllers
         public ActorsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetActors()
+        public async Task<IActionResult> GetActors([FromQuery]ActorParameters actorParameters)
         {
-            var baseResult = await _service.Actor.GetAllActorsAsync(trackChanges: false);
+            var baseResult = await _service.Actor.GetAllActorsAsync(actorParameters, trackChanges: false);
 
-            var actors = baseResult.GetResult<IEnumerable<ActorDto>>();
+            var (actors, metaData) = baseResult.GetResult<(IEnumerable<ActorDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(actors);
         }

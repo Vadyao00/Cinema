@@ -1,4 +1,5 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +15,19 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteShowtimeForMovie(Showtime showtime) => Delete(showtime);
 
-        public async Task<IEnumerable<Showtime>> GetAllShowtimesForMovieAsync(Guid movieId, bool trackChanges) =>
-            await FindByCondition(s => s.MovieId.Equals(movieId),trackChanges)
+        public async Task<PagedList<Showtime>> GetAllShowtimesForMovieAsync(ShowtimeParameters showtimeParameters, Guid movieId, bool trackChanges)
+        {
+            var showtimes = await FindByCondition(s => s.MovieId.Equals(movieId), trackChanges)
                   .Include(s => s.Movie)
                   .OrderBy(s => s.StartTime)
+                  .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)
+                  .Take(showtimeParameters.PageSize)
                   .ToListAsync();
+
+            var count = await FindByCondition(s => s.MovieId.Equals(movieId), trackChanges).CountAsync();
+
+            return new PagedList<Showtime>(showtimes, count, showtimeParameters.PageNumber, showtimeParameters.PageSize);
+        }
 
         public async Task<Showtime> GetShowtimeForMovieAsync(Guid movieId, Guid id, bool trackChanges) =>
             await FindByCondition(s => s.ShowtimeId.Equals(id) && s.MovieId.Equals(movieId), trackChanges)

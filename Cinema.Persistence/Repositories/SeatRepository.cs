@@ -1,4 +1,5 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,13 +16,21 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteSeat(Seat seat) => Delete(seat);
 
-        public async Task<IEnumerable<Seat>> GetAllSeatsAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
+        public async Task<PagedList<Seat>> GetAllSeatsAsync(SeatParameters seatParameters, bool trackChanges)
+        {
+            var seats = await FindAll(trackChanges)
                   .Include(s => s.Event)
                   .Include(s => s.Showtime)
                   .Include(s => s.Showtime!.Movie)
                   .OrderBy(s => s.SeatNumber)
+                  .Skip((seatParameters.PageNumber - 1) * seatParameters.PageSize)
+                  .Take(seatParameters.PageSize)
                   .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<Seat>(seats, count, seatParameters.PageNumber, seatParameters.PageSize);
+        }
 
         public async Task<Seat> GetSeatAsync(Guid id, bool trackChanges) =>
             await FindByCondition(s => s.SeatId.Equals(id), trackChanges)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -46,12 +47,12 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<Employee>(employee);
         }
 
-        public async Task<ApiBaseResponse> GetAllEmployeesAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllEmployeesAsync(EmployeeParameters employeeParameters, bool trackChanges)
         {
-            var employees = await _repository.Employee.GetEmployeesAsync(trackChanges);
-            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+            var employeesWithMetaData = await _repository.Employee.GetEmployeesAsync(employeeParameters, trackChanges);
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employeesWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<EmployeeDto>>(employeesDto);
+            return new ApiOkResponse<(IEnumerable<EmployeeDto>, MetaData)>((employeesDto, employeesWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetEmployeeAsync(Guid employeeId, bool trackChanges)

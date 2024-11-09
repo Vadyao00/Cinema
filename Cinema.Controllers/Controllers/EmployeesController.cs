@@ -1,8 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -15,11 +17,13 @@ namespace Cinema.Controllers.Controllers
         public EmployeesController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployees()
+        public async Task<IActionResult> GetEmployees([FromQuery]EmployeeParameters employeeParameters)
         {
-            var baseResult = await _service.Employee.GetAllEmployeesAsync(trackChanges: false);
+            var baseResult = await _service.Employee.GetAllEmployeesAsync(employeeParameters, trackChanges: false);
 
-            var employees = baseResult.GetResult<IEnumerable<EmployeeDto>>();
+            var (employees, metaData) = baseResult.GetResult<(IEnumerable<EmployeeDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(employees);
         }

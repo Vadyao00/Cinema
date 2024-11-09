@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -57,16 +58,16 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<WorkLog>(workLog);
         }
 
-        public async Task<ApiBaseResponse> GetAllWorkLogsForEmployeeAsync(Guid employeeId, bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllWorkLogsForEmployeeAsync(WorkLogParameters workLogParameters, Guid employeeId, bool trackChanges)
         {
             var employee = await _repository.Employee.GetEmployeeAsync(employeeId, trackChanges);
             if (employee is null)
                 return new EmployeeNotFoundResponse(employeeId);
 
-            var workLogs = await _repository.WorkLog.GetAllWorkLogsForEmployeeAsync(employeeId, trackChanges);
-            var workLogsDto = _mapper.Map<IEnumerable<WorkLogDto>>(workLogs);
+            var workLogsWithMetaData = await _repository.WorkLog.GetAllWorkLogsForEmployeeAsync(workLogParameters, employeeId, trackChanges);
+            var workLogsDto = _mapper.Map<IEnumerable<WorkLogDto>>(workLogsWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<WorkLogDto>>(workLogsDto);
+            return new ApiOkResponse<(IEnumerable<WorkLogDto>, MetaData)>((workLogsDto, workLogsWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetWorkLogForEmployeeAsync(Guid employeeId, Guid Id, bool trackChanges)

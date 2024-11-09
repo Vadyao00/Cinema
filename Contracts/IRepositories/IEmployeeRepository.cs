@@ -1,10 +1,11 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 
 namespace Contracts.IRepositories
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetEmployeesAsync(bool trackChanges);
+        Task<PagedList<Employee>> GetEmployeesAsync(EmployeeParameters employeeParameters, bool trackChanges);
         Task<Employee> GetEmployeeAsync(Guid id, bool trackChanges);
         void CreateEmployee(Employee employee);
         void DeleteEmployee(Employee employee);

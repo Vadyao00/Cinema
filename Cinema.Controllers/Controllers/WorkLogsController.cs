@@ -1,8 +1,10 @@
 ﻿using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
+using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Cinema.Controllers.Controllers
 {
@@ -15,13 +17,15 @@ namespace Cinema.Controllers.Controllers
         public WorkLogsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        public async Task<IActionResult> GetWorkLogForEmployee(Guid employeeId)
+        public async Task<IActionResult> GetWorkLogForEmployee([FromQuery]WorkLogParameters workLogParameters, Guid employeeId)
         {
-            var baseResult = await _service.WorkLog.GetAllWorkLogsForEmployeeAsync(employeeId, trackChanges: false);
+            var baseResult = await _service.WorkLog.GetAllWorkLogsForEmployeeAsync(workLogParameters, employeeId, trackChanges: false);
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
-            var workLogs = baseResult.GetResult<IEnumerable<WorkLogDto>>();
+            var (workLogs, metaData) = baseResult.GetResult<(IEnumerable<WorkLogDto>, MetaData)>();
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(workLogs);
         }

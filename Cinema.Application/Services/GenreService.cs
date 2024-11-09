@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.RequestFeatures;
 using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IRepositories;
@@ -45,12 +46,12 @@ namespace Cinema.Application.Services
             return new ApiOkResponse<Genre>(genre);
         }
 
-        public async Task<ApiBaseResponse> GetAllGenresAsync(bool trackChanges)
+        public async Task<ApiBaseResponse> GetAllGenresAsync(GenreParameters genreParameters, bool trackChanges)
         {
-            var genres = await _repository.Genre.GetAllGenresAsync(trackChanges);
-            var genresDto = _mapper.Map<IEnumerable<GenreDto>>(genres);
+            var genresWithMetaData = await _repository.Genre.GetAllGenresAsync(genreParameters, trackChanges);
+            var genresDto = _mapper.Map<IEnumerable<GenreDto>>(genresWithMetaData);
 
-            return new ApiOkResponse<IEnumerable<GenreDto>>(genresDto);
+            return new ApiOkResponse<(IEnumerable<GenreDto>, MetaData)>((genresDto, genresWithMetaData.MetaData));
         }
 
         public async Task<ApiBaseResponse> GetGenreAsync(Guid genreId, bool trackChanges)
