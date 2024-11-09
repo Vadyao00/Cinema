@@ -1,5 +1,6 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<PagedList<Employee>> GetEmployeesAsync(EmployeeParameters employeeParameters, bool trackChanges)
         {
             var employees = await FindAll(trackChanges)
+                  .Search(employeeParameters.searchName)
                   .OrderBy(e => e.Name)
                   .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
                   .Take(employeeParameters.PageSize)

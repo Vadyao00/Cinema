@@ -1,5 +1,6 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,9 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Movie>> GetAllMoviesForGenreAsync(MovieParameters movieParameters, Guid genreId, bool trackChanges)
         {
-            var movies = await FindByCondition(m => m.GenreId.Equals(genreId)
-                                               && m.AgeRestriction >= movieParameters.MinAgeRestriction && m.AgeRestriction <= movieParameters.MaxAgeRestriction, trackChanges)
+            var movies = await FindByCondition(m => m.GenreId.Equals(genreId), trackChanges)
+                  .FilterMovies(movieParameters.MinAgeRestriction, movieParameters.MaxAgeRestriction)
+                  .Search(movieParameters.searchTitle)
                   .Include(m => m.Genre)
                   .OrderBy(m => m.Title)
                   .Skip((movieParameters.PageNumber - 1) * movieParameters.PageSize)

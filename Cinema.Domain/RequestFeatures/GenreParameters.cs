@@ -2,6 +2,6 @@
 {
     public class GenreParameters : RequestParameters
     {
-
+        public string? searchName { get; set; }
     }
 }

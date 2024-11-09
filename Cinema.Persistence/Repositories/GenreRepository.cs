@@ -1,8 +1,8 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Cinema.Persistence.Repositories
 {
@@ -15,6 +15,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<PagedList<Genre>> GetAllGenresAsync(GenreParameters genreParameters, bool trackChanges)
         {
             var genres = await FindAll(trackChanges)
+                  .Search(genreParameters.searchName)
                   .OrderBy(x => x.Name)
                   .Skip((genreParameters.PageNumber - 1) * genreParameters.PageSize)
                   .Take(genreParameters.PageSize)

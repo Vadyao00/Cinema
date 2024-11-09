@@ -2,5 +2,6 @@
 {
     public class WorkLogParameters : RequestParameters
     {
+        public string? searchName { get; set; }
     }
 }

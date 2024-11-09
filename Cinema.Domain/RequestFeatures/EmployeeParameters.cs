@@ -2,6 +2,6 @@
 {
     public class EmployeeParameters : RequestParameters
     {
-
+        public string? searchName { get; set; }
     }
 }

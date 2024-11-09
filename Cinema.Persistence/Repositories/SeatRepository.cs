@@ -1,5 +1,6 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,8 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Seat>> GetAllSeatsAsync(SeatParameters seatParameters, bool trackChanges)
         {
-            var seats = await FindByCondition(s => s.SeatNumber >= seatParameters.MinSeatNumber && s.SeatNumber <= seatParameters.MaxSeatNumber,trackChanges)
+            var seats = await FindAll(trackChanges)
+                  .FilterSeats(seatParameters.MinSeatNumber, seatParameters.MaxSeatNumber)
                   .Include(s => s.Event)
                   .Include(s => s.Showtime)
                   .Include(s => s.Showtime!.Movie)

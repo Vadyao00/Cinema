@@ -6,5 +6,7 @@
         public uint MaxAgeRestriction { get; set; } = int.MaxValue;
 
         public bool ValidAgeRestriction => MaxAgeRestriction > MinAgeRestriction;
+
+        public string? searchTitle { get; set; }
     }
 }

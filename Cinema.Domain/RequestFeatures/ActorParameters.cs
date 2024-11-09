@@ -2,6 +2,6 @@
 {
     public class ActorParameters : RequestParameters
     {
-
+        public string? searchName { get; set; }
     }
 }

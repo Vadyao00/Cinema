@@ -1,5 +1,6 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<PagedList<WorkLog>> GetAllWorkLogsForEmployeeAsync(WorkLogParameters workLogParameters, Guid employeeId, bool trackChanges)
         {
             var workLogs = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
+                  .Search(workLogParameters.searchName)
                   .Include(w => w.Employee)
                   .OrderBy(w => w.WorkHours)
                   .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)

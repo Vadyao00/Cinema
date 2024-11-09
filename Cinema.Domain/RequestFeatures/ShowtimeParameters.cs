@@ -9,5 +9,7 @@
 
         public bool ValidTicketPriceRange => MaxTicketPrice > MinTicketPrice;
         public bool ValidTimeRange => EndTime > StartTime;
+
+        public string? searchTitle { get; set; }
     }
 }

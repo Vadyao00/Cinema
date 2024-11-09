@@ -1,5 +1,6 @@
 ﻿using Cinema.Domain.Entities;
 using Cinema.Domain.RequestFeatures;
+using Cinema.Persistence.Extensions;
 using Contracts.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +14,9 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<PagedList<Event>> GetAllEventsAsync(EventParameters eventParameters, bool trackChanges)
         {
-            var events = await FindByCondition(e => e.TicketPrice >= eventParameters.MinTicketPrice && e.TicketPrice <= eventParameters.MaxTicketPrice
-                                               && e.StartTime >= eventParameters.StartTime && e.EndTime <= eventParameters.EndTime, trackChanges)
+            var events = await FindAll(trackChanges)
+                  .FilterEvents(eventParameters.MinTicketPrice, eventParameters.MaxTicketPrice, eventParameters.StartTime, eventParameters.EndTime)
+                  .Search(eventParameters.searchName)
                   .OrderBy(e => e.StartTime)
                   .Skip((eventParameters.PageNumber - 1) * eventParameters.PageSize)
                   .Take(eventParameters.PageSize)
