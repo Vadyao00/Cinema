@@ -16,7 +16,7 @@ namespace Cinema.Persistence.Repositories
         {
             var genres = await FindAll(trackChanges)
                   .Search(genreParameters.searchName)
-                  .OrderBy(x => x.Name)
+                  .Sort(genreParameters.OrderBy)
                   .Skip((genreParameters.PageNumber - 1) * genreParameters.PageSize)
                   .Take(genreParameters.PageSize)
                   .ToListAsync();

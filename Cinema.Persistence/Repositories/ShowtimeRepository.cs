@@ -22,7 +22,7 @@ namespace Cinema.Persistence.Repositories
                   .FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
                   .Search(showtimeParameters.searchTitle)
                   .Include(s => s.Movie)
-                  .OrderBy(s => s.StartTime)
+                  .Sort(showtimeParameters.OrderBy)
                   .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)
                   .Take(showtimeParameters.PageSize)
                   .ToListAsync();

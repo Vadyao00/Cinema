@@ -21,7 +21,7 @@ namespace Cinema.Persistence.Repositories
             var workLogs = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
                   .Search(workLogParameters.searchName)
                   .Include(w => w.Employee)
-                  .OrderBy(w => w.WorkHours)
+                  .Sort(workLogParameters.OrderBy)
                   .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)
                   .Take(workLogParameters.PageSize)
                   .ToListAsync();

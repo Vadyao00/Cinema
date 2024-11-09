@@ -22,7 +22,7 @@ namespace Cinema.Persistence.Repositories
                   .FilterMovies(movieParameters.MinAgeRestriction, movieParameters.MaxAgeRestriction)
                   .Search(movieParameters.searchTitle)
                   .Include(m => m.Genre)
-                  .OrderBy(m => m.Title)
+                  .Sort(movieParameters.OrderBy)
                   .Skip((movieParameters.PageNumber - 1) * movieParameters.PageSize)
                   .Take(movieParameters.PageSize)
                   .ToListAsync();

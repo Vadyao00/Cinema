@@ -17,7 +17,7 @@ namespace Cinema.Persistence.Repositories
             var events = await FindAll(trackChanges)
                   .FilterEvents(eventParameters.MinTicketPrice, eventParameters.MaxTicketPrice, eventParameters.StartTime, eventParameters.EndTime)
                   .Search(eventParameters.searchName)
-                  .OrderBy(e => e.StartTime)
+                  .Sort(eventParameters.OrderBy)
                   .Skip((eventParameters.PageNumber - 1) * eventParameters.PageSize)
                   .Take(eventParameters.PageSize)
                   .ToListAsync();

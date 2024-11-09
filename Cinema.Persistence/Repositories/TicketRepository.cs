@@ -21,7 +21,7 @@ namespace Cinema.Persistence.Repositories
             var tickets = await FindByCondition(t => t.SeatId.Equals(seatId), trackChanges)
                   .FilterTickets(ticketParameters.MinSeatNumber, ticketParameters.MaxSeatNumber)
                   .Include(t => t.Seat)
-                  .OrderBy(t => t.TicketId)
+                  .Sort(ticketParameters.OrderBy)
                   .Skip((ticketParameters.PageNumber - 1) * ticketParameters.PageSize)
                   .Take(ticketParameters.PageSize)
                   .ToListAsync();

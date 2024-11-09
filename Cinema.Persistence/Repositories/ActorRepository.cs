@@ -20,7 +20,7 @@ namespace Cinema.Persistence.Repositories
         {
             var actors = await FindAll(trackChanges)
                   .Search(actorParameters.searchName)
-                  .OrderBy(a => a.Name)
+                  .Sort(actorParameters.OrderBy)
                   .Skip((actorParameters.PageNumber - 1) * actorParameters.PageSize)
                   .Take(actorParameters.PageSize)
                   .ToListAsync();

@@ -24,7 +24,7 @@ namespace Cinema.Persistence.Repositories
                   .Include(s => s.Event)
                   .Include(s => s.Showtime)
                   .Include(s => s.Showtime!.Movie)
-                  .OrderBy(s => s.SeatNumber)
+                  .Sort(seatParameters.OrderBy)
                   .Skip((seatParameters.PageNumber - 1) * seatParameters.PageSize)
                   .Take(seatParameters.PageSize)
                   .ToListAsync();

@@ -1,4 +1,6 @@
 ﻿using Cinema.Domain.Entities;
+using Cinema.Persistence.Extensions.Utility;
+using System.Linq.Dynamic.Core;
 
 namespace Cinema.Persistence.Extensions
 {
@@ -12,6 +14,19 @@ namespace Cinema.Persistence.Extensions
             var lowerCaseName = searchName.Trim().ToLower();
 
             return actors.Where(a => a.Name.ToLower().Contains(lowerCaseName));
+        }
+
+        public static IQueryable<Actor> Sort(this IQueryable<Actor> actors, string orderByQueryString)
+        {
+            if (string.IsNullOrWhiteSpace(orderByQueryString))
+                return actors.OrderBy(e => e.Name);
+
+            var orderQuery = OrderQueryBuilder.CreateOrderQuery<Actor>(orderByQueryString);
+
+            if (string.IsNullOrWhiteSpace(orderQuery))
+                return actors.OrderBy(e => e.Name);
+
+            return actors.OrderBy(orderQuery);
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class SeatParameters : RequestParameters
     {
+        public SeatParameters() => OrderBy = "SeatNumber";
         public uint MinSeatNumber { get; set; }
         public uint MaxSeatNumber { get; set; } = int.MaxValue;
 

@@ -2,6 +2,7 @@
 {
     public class MovieParameters : RequestParameters
     {
+        public MovieParameters() => OrderBy = "Title";
         public uint MinAgeRestriction { get; set; }
         public uint MaxAgeRestriction { get; set; } = int.MaxValue;
 

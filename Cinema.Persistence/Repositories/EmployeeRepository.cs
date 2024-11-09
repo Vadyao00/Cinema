@@ -20,7 +20,7 @@ namespace Cinema.Persistence.Repositories
         {
             var employees = await FindAll(trackChanges)
                   .Search(employeeParameters.searchName)
-                  .OrderBy(e => e.Name)
+                  .Sort(employeeParameters.OrderBy)
                   .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
                   .Take(employeeParameters.PageSize)
                   .ToListAsync();
