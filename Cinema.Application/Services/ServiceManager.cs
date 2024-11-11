@@ -2,6 +2,9 @@
 using Contracts.IServices;
 using Cinema.LoggerService;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Cinema.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace Cinema.Application.Services
 {
@@ -16,8 +19,9 @@ namespace Cinema.Application.Services
         private readonly Lazy<IShowtimeService> _showtimeService;
         private readonly Lazy<ITicketService> _ticketService;
         private readonly Lazy<IWorkLogService> _workLogService;
+        private readonly Lazy<IAuthenticationService> _authenticationService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
         {
             _actorService = new Lazy<IActorService>(() => new ActorService(repositoryManager, logger, mapper));
             _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repositoryManager, logger, mapper));
@@ -28,6 +32,7 @@ namespace Cinema.Application.Services
             _showtimeService = new Lazy<IShowtimeService>(() => new ShowtimeService(repositoryManager, logger, mapper));
             _ticketService = new Lazy<ITicketService>(() => new TicketService(repositoryManager, logger, mapper));
             _workLogService = new Lazy<IWorkLogService>(() => new WorkLogService(repositoryManager, logger, mapper));
+            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger, mapper, userManager, configuration));
         }
 
         public IActorService Actor => _actorService.Value;
@@ -47,5 +52,7 @@ namespace Cinema.Application.Services
         public ITicketService Ticket => _ticketService.Value;
 
         public IWorkLogService WorkLog => _workLogService.Value;
+
+        public IAuthenticationService AuthenticationService => _authenticationService.Value;
     }
 }

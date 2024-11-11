@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Cinema.Domain.Entities;
 using Cinema.Persistence.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Cinema.Persistence
 {
-    public partial class CinemaContext : DbContext
+    public partial class CinemaContext : IdentityDbContext<User>
     {
         public CinemaContext()
         {
@@ -36,6 +36,8 @@ namespace Cinema.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.ApplyConfiguration(new ActorConfiguration());
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new EventConfiguration());
@@ -45,8 +47,7 @@ namespace Cinema.Persistence
             modelBuilder.ApplyConfiguration(new ShowtimeConfiguration());
             modelBuilder.ApplyConfiguration(new TicketConfiguration());
             modelBuilder.ApplyConfiguration(new WorkLogConfiguration());
-
-            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

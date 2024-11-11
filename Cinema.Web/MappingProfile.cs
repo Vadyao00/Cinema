@@ -43,6 +43,7 @@ namespace Cinema.API
             CreateMap<ShowtimeForUpdateDto, Showtime>();
             CreateMap<TicketForUpdateDto, Ticket>();
             CreateMap<WorkLogForUpdateDto, WorkLog>();
+            CreateMap<UserForRegistrationDto, User>();
         }
     }
 }

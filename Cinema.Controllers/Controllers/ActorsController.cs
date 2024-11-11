@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -17,6 +18,7 @@ namespace Cinema.Controllers.Controllers
         public ActorsController(IServiceManager service) => _service = service;
 
         [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetActors([FromQuery]ActorParameters actorParameters)
         {
             var baseResult = await _service.Actor.GetAllActorsAsync(actorParameters, trackChanges: false);

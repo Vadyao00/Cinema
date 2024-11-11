@@ -72,6 +72,9 @@ namespace Cinema.API
 
             services.AddAutoMapper(typeof(Program));
 
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(configuration);
             services.AddAuthorization();
         }
 
@@ -91,6 +94,7 @@ namespace Cinema.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
         }

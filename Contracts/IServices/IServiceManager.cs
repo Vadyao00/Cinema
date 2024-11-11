@@ -11,5 +11,6 @@
         IShowtimeService Showtime { get; }
         ITicketService Ticket { get; }
         IWorkLogService WorkLog { get; }
+        IAuthenticationService AuthenticationService { get; }
     }
 }
