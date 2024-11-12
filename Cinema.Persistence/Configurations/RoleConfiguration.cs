@@ -11,8 +11,8 @@ namespace Cinema.Persistence.Configurations
             builder.HasData(
                 new IdentityRole
                 {
-                    Name = "Manager",
-                    NormalizedName = "MANAGER"
+                    Name = "User",
+                    NormalizedName = "USER"
                 },
                 new IdentityRole
                 {

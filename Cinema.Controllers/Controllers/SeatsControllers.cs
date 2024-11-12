@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/seats")]
+    [Authorize]
     public class SeatsControllers : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -44,6 +46,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost("showtimes/{showtimeId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateSeatForShowtime(Guid showtimeId, [FromBody] SeatForCreationDto seat)
         {
             var baseResult = await _service.Seat.CreateSeatForShowtimeOrEventAsync(showtimeId, null, seat, trackChanges: false);
@@ -57,6 +60,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost("events/{eventId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateSeatForEvent(Guid eventId, [FromBody] SeatForCreationDto seat)
         {
             var baseResult = await _service.Seat.CreateSeatForShowtimeOrEventAsync(null, eventId, seat, trackChanges: false);
@@ -69,6 +73,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteSeat(Guid id)
         {
             var baseResult = await _service.Seat.DeleteSeatAsync(id, trackChanges: false);
@@ -80,6 +85,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateSeat(Guid id, [FromBody] SeatForUpdateDto seat)
         {
             var baseResult = await _service.Seat.UpdateSeatAsync(id, seat, seatTrackChanges: true);

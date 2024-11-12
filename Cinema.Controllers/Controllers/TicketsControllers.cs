@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/seats/{seatId}/tickets")]
+    [Authorize]
     public class TicketsControllers : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -44,6 +46,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateTicketForSeat(Guid seatId, [FromBody] TicketForCreationDto ticket)
         {
             var baseResult = await _service.Ticket.CreateTicketForSeatAsync(seatId, ticket, trackChanges: false);
@@ -56,6 +59,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteTicket(Guid seatId, Guid id)
         {
             var baseResult = await _service.Ticket.DeleteTicketAsync(seatId, id, trackChanges: false);
@@ -67,6 +71,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateTicket(Guid seatId, Guid id, [FromBody] TicketForUpdateDto ticket)
         {
             var baseResult = await _service.Ticket.UpdateTicketAsync(seatId, id, ticket, seatTrackChanges: false, tickTrackChanges: true);

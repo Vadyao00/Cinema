@@ -11,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/actors")]
+    [Authorize]
     public class ActorsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -18,7 +19,6 @@ namespace Cinema.Controllers.Controllers
         public ActorsController(IServiceManager service) => _service = service;
 
         [HttpGet]
-        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetActors([FromQuery]ActorParameters actorParameters)
         {
             var baseResult = await _service.Actor.GetAllActorsAsync(actorParameters, trackChanges: false);
@@ -46,6 +46,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost(Name = "CreateActor")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateActor([FromBody] ActorForCreationDto actor)
         {
             var createdActor = await _service.Actor.CreateActorAsync(actor);
@@ -54,6 +55,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteActor(Guid id)
         {
             var baseResult = await _service.Actor.DeleteActorAsync(id, trackChanges: false);
@@ -65,6 +67,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateActor(Guid id, [FromBody] ActorForUpdateDto actor)
         {
             var baseResult = await _service.Actor.UpdateActorAsync(id, actor , trackChanges: true);

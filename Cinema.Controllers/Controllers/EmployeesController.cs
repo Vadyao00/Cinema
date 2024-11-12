@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/employees")]
+    [Authorize]
     public class EmployeesController : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -45,6 +47,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost(Name = "CreateEmployee")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeForCreationDto employee)
         {
             var createdEmployee = await _service.Employee.CreateEmployeeAsync(employee);
@@ -53,6 +56,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteEmployee(Guid id)
         {
             var baseResult = await _service.Employee.DeleteEmployeeAsync(id, trackChanges: false);
@@ -64,6 +68,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateEmployee(Guid id, [FromBody] EmployeeForUpdateDto employee)
         {
             var baseResult = await _service.Employee.UpdateEmployeeAsync(id, employee, trackChanges: true);

@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/employees/{employeeId}/workLogs")]
+    [Authorize]
     public class WorkLogsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -44,6 +46,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateWorkLogForEmployee(Guid employeeId, [FromBody] WorkLogForCreationDto workLog)
         {
             var baseResult = await _service.WorkLog.CreateWorkLogForEmployeeAsync(employeeId, workLog, trackChanges: false);
@@ -56,6 +59,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteWorkLog(Guid employeeId, Guid id)
         {
             var baseResult = await _service.WorkLog.DeleteWorkLogForEmployeeAsync(employeeId, id, trackChanges: false);
@@ -67,6 +71,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateWorkLog(Guid employeeId, Guid id, [FromBody] WorkLogForUpdateDto workLog)
         {
             var baseResult = await _service.WorkLog.UpdateWorkLogAsync(employeeId, id, workLog, empTrackChanges: false, wrkTrackChanges: true);

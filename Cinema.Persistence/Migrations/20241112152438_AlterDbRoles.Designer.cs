@@ -4,6 +4,7 @@ using Cinema.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cinema.Persistence.Migrations
 {
     [DbContext(typeof(CinemaContext))]
-    partial class CinemaContextModelSnapshot : ModelSnapshot
+    [Migration("20241112152438_AlterDbRoles")]
+    partial class AlterDbRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,13 +415,13 @@ namespace Cinema.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e1f08bb-628f-4037-991a-0f44d8d0f7bf",
+                            Id = "04f1f63e-7519-4053-8346-95edabf2cf1f",
                             Name = "User",
-                            NormalizedName = "USER"
+                            NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "1a474b86-bd85-4c4f-9177-3cfeb709ab1e",
+                            Id = "356a97d6-7f10-4752-a63f-e58dea426b89",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

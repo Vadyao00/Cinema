@@ -3,6 +3,7 @@ using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,6 +11,7 @@ namespace Cinema.Controllers.Controllers
 {
     [ApiController]
     [Route("api/events")]
+    [Authorize]
     public class EventsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
@@ -44,6 +46,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPost(Name = "CreateEvent")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateEvent([FromBody] EventForCreationDto eevent)
         {
             var createdEvent = await _service.Event.CreateEventAsync(eevent);
@@ -52,6 +55,7 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteEvent(Guid id)
         {
             var baseResult = await _service.Event.DeleteEventAsync(id, trackChanges: false);
@@ -63,6 +67,7 @@ namespace Cinema.Controllers.Controllers
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] EventForUpdateDto actor)
         {
             var baseResult = await _service.Event.UpdateEventAsync(id, actor, trackChanges: true);
