@@ -7,6 +7,7 @@ namespace Cinema.Controllers.Controllers
 {
     public class ApiControllerBase : Controller
     {
+        [HttpHead]
         public IActionResult ProccessError(ApiBaseResponse baseResponse)
         {
             return baseResponse switch

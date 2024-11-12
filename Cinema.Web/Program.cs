@@ -49,6 +49,8 @@ namespace Cinema.API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.ConfigureSwagger();
+
             services.ConfigureCors();
 
             services.AddScoped<ValidationFilterAttribute>();
@@ -81,6 +83,11 @@ namespace Cinema.API
 
         public static void ConfigureApp(IApplicationBuilder app)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "Cinema API v1");
+            });
 
             app.UseHttpsRedirection();
 

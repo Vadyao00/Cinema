@@ -12,6 +12,7 @@ namespace Cinema.Controllers.Controllers
     [ApiController]
     [Route("api/actors")]
     [Authorize]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class ActorsController : ApiControllerBase
     {
         private readonly IServiceManager _service;
