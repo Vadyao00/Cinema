@@ -75,6 +75,7 @@ namespace Cinema.API
             services.AddAuthentication();
             services.ConfigureIdentity();
             services.ConfigureJWT(configuration);
+            services.AddJwtConfiguration(configuration);
             services.AddAuthorization();
         }
 

@@ -5,6 +5,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Cinema.Domain.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Cinema.Domain.ConfigurationModels;
 
 namespace Cinema.Application.Services
 {
@@ -21,7 +23,7 @@ namespace Cinema.Application.Services
         private readonly Lazy<IWorkLogService> _workLogService;
         private readonly Lazy<IAuthenticationService> _authenticationService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper, UserManager<User> userManager, IOptions<JwtConfiguration> configuration)
         {
             _actorService = new Lazy<IActorService>(() => new ActorService(repositoryManager, logger, mapper));
             _employeeService = new Lazy<IEmployeeService>(() => new EmployeeService(repositoryManager, logger, mapper));
