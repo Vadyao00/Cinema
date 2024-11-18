@@ -28,10 +28,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Install dependencies
-      run: dotnet restore --ignore-failed-sources
+      run: dotnet restore Cinema.API.csproj --ignore-failed-sources
       
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build Cinema.API.csproj --configuration Release --no-restore
     
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test Cinema.API.csproj --no-restore --verbosity normal
