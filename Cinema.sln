@@ -26,8 +26,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.LoggerService", "Cin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cinema.Controllers", "Cinema.Controllers\Cinema.Controllers.csproj", "{DF154EC3-6DE1-46B8-9343-75BF8A5867D5}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DA36E94C-A775-4D88-AC55-A675DFE8044E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,10 +60,6 @@ Global
 		{DF154EC3-6DE1-46B8-9343-75BF8A5867D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF154EC3-6DE1-46B8-9343-75BF8A5867D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF154EC3-6DE1-46B8-9343-75BF8A5867D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA36E94C-A775-4D88-AC55-A675DFE8044E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA36E94C-A775-4D88-AC55-A675DFE8044E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA36E94C-A775-4D88-AC55-A675DFE8044E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA36E94C-A775-4D88-AC55-A675DFE8044E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
