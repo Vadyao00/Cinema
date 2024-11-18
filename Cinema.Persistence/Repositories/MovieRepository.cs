@@ -16,6 +16,22 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteMovie(Movie movie) => Delete(movie);
 
+        public async Task<PagedList<Movie>> GetAllMoviesAsync(MovieParameters movieParameters, bool trackChanges)
+        {
+            var movies = await FindAll(trackChanges)
+                  .FilterMovies(movieParameters.MinAgeRestriction, movieParameters.MaxAgeRestriction)
+                  .Search(movieParameters.searchTitle)
+                  .Include(m => m.Genre)
+                  .Sort(movieParameters.OrderBy)
+                  .Skip((movieParameters.PageNumber - 1) * movieParameters.PageSize)
+                  .Take(movieParameters.PageSize)
+                  .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<Movie>(movies, count, movieParameters.PageNumber, movieParameters.PageSize);
+        }
+
         public async Task<PagedList<Movie>> GetAllMoviesForGenreAsync(MovieParameters movieParameters, Guid genreId, bool trackChanges)
         {
             var movies = await FindByCondition(m => m.GenreId.Equals(genreId), trackChanges)

@@ -16,6 +16,21 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteTicket(Ticket ticket) => Delete(ticket);
 
+        public async Task<PagedList<Ticket>> GetAllTicketsAsync(TicketParameters ticketParameters, bool trackChanges)
+        {
+            var tickets = await FindAll(trackChanges)
+                  .FilterTickets(ticketParameters.MinSeatNumber, ticketParameters.MaxSeatNumber)
+                  .Include(t => t.Seat)
+                  .Sort(ticketParameters.OrderBy)
+                  .Skip((ticketParameters.PageNumber - 1) * ticketParameters.PageSize)
+                  .Take(ticketParameters.PageSize)
+                  .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<Ticket>(tickets, count, ticketParameters.PageNumber, ticketParameters.PageSize);
+        }
+
         public async Task<PagedList<Ticket>> GetAllTicketsForSeatAsync(TicketParameters ticketParameters, Guid seatId, bool trackChanges)
         {
             var tickets = await FindByCondition(t => t.SeatId.Equals(seatId), trackChanges)

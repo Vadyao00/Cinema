@@ -1,8 +1,11 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.MoviesCommands;
+using Cinema.Application.Queries.MoviesQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +17,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class MoviesController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public MoviesController(IServiceManager service) => _service = service;
+        public MoviesController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetMoviesForGenre([FromQuery]MovieParameters movieParameters, Guid genreId)
         {
-            var baseResult = await _service.Movie.GetAllMoviesAsync(movieParameters, genreId, trackChanges: false);
+            var baseResult = await _sender.Send(new GetMoviesQuery(movieParameters, genreId, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +38,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GetMovieById")]
         public async Task<IActionResult> GetMovieForGenre(Guid genreId, Guid id)
         {
-            var baseResult = await _service.Movie.GetMovieAsync(genreId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetMovieQuery(genreId, id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +52,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateMovieForGenre(Guid genreId, [FromBody] MovieForCreationDto movie)
         {
-            var baseResult = await _service.Movie.CreateMovieForGenreAsync(genreId, movie, trackChanges: false);
+            var baseResult = await _sender.Send(new CreateMovieCommand(genreId, movie, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -62,7 +65,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteMovieForGenre(Guid genreId, Guid id)
         {
-            var baseResult = await _service.Movie.DeleteMovieAsync(genreId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteMovieCommand(genreId, id , TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -74,7 +77,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateMovieForGenre(Guid genreId, Guid id, [FromBody] MovieForUpdateDto movie)
         {
-            var baseResult = await _service.Movie.UpdateMovieForGenreAsync(genreId, id, movie, genrTrackChanges: false, movTrackChanges: true);
+            var baseResult = await _sender.Send(new UpdateMovieCommand(genreId, id, movie, GenrTrackChanges:false, MovTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

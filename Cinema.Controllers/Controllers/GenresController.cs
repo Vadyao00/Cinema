@@ -1,8 +1,10 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.GenresCommands;
+using Cinema.Application.Queries.GenresQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
-using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +16,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class GenresController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public GenresController(IServiceManager service) => _service = service;
+        public GenresController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetGenres([FromQuery]GenreParameters genreParameters)
         {
-            var baseResult = await _service.Genre.GetAllGenresAsync(genreParameters, trackChanges: false);
+            var baseResult = await _sender.Send(new GetGenresQuery(genreParameters, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +37,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GenreById")]
         public async Task<IActionResult> GetGenre(Guid id)
         {
-            var baseResult = await _service.Genre.GetGenreAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetGenreQuery(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +51,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateGenre([FromBody] GenreForCreationDto genre)
         {
-            var createdGenre = await _service.Genre.CreateGenreAsync(genre);
+            var createdGenre = await _sender.Send(new CreateGenreCommand(genre));
 
             return CreatedAtRoute("GenreById", new { id = createdGenre.GenreId }, createdGenre);
         }
@@ -58,7 +60,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteGenre(Guid id)
         {
-            var baseResult = await _service.Genre.DeleteGenreAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteGenreCommand(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -70,7 +72,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateGenre(Guid id, [FromBody] GenreForUpdateDto genre)
         {
-            var baseResult = await _service.Genre.UpdateGenreAsync(id, genre, trackChanges: true);
+            var baseResult = await _sender.Send(new UpdateGenreCommand(id, genre, TrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

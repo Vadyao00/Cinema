@@ -1,8 +1,11 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.EmployeesCommands;
+using Cinema.Application.Queries.EmployeesQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +17,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class EmployeesController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public EmployeesController(IServiceManager service) => _service = service;
+        public EmployeesController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetEmployees([FromQuery]EmployeeParameters employeeParameters)
         {
-            var baseResult = await _service.Employee.GetAllEmployeesAsync(employeeParameters, trackChanges: false);
+            var baseResult = await _sender.Send(new GetEmployeesQuery(employeeParameters, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +38,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "EmployeeById")]
         public async Task<IActionResult> GetEmployee(Guid id)
         {
-            var baseResult = await _service.Employee.GetEmployeeAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetEmployeeQuery(id, TrackChanges: false));
 
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
@@ -50,7 +53,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeForCreationDto employee)
         {
-            var createdEmployee = await _service.Employee.CreateEmployeeAsync(employee);
+            var createdEmployee = await _sender.Send(new CreateEmployeeCommand(employee));
 
             return CreatedAtRoute("EmployeeById", new { id = createdEmployee.EmployeeId }, createdEmployee);
         }
@@ -59,7 +62,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteEmployee(Guid id)
         {
-            var baseResult = await _service.Employee.DeleteEmployeeAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteEmployeeCommand(id, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -71,7 +74,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateEmployee(Guid id, [FromBody] EmployeeForUpdateDto employee)
         {
-            var baseResult = await _service.Employee.UpdateEmployeeAsync(id, employee, trackChanges: true);
+            var baseResult = await _sender.Send(new UpdateEmployeeCommand(id, employee, TrackChanges: true));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 

@@ -1,0 +1,20 @@
+volumes:
+  db_data:
+
+services:
+  cinema.api:
+    image: ${DOCKER_REGISTRY-}cinemaapi
+    build:
+      context: .
+      dockerfile: Cinema.Web/Dockerfile
+    ports:
+      - "8080:8080"
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA="Y"
+      - MSSQL_SA_PASSWORD=Password1000
+    volumes:
+      - db_data:/var/opt/mssql

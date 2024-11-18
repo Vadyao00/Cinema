@@ -1,8 +1,10 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.TicketsCommands;
+using Cinema.Application.Queries.TicketsQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
-using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +16,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class TicketsControllers : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public TicketsControllers(IServiceManager service) => _service = service;
+        public TicketsControllers(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetTicketsForSeat([FromQuery]TicketParameters ticketParameters, Guid seatId)
         {
-            var baseResult = await _service.Ticket.GetAllTicketsForSeatAsync(ticketParameters, seatId, trackChanges: false);
+            var baseResult = await _sender.Send(new GetTicketsQuery(ticketParameters, seatId, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +37,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GetTicketById")]
         public async Task<IActionResult> GetTicketForSeat(Guid seatId, Guid id)
         {
-            var baseResult = await _service.Ticket.GetTicketAsync(seatId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetTicketQuery(seatId, id , TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +51,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateTicketForSeat(Guid seatId, [FromBody] TicketForCreationDto ticket)
         {
-            var baseResult = await _service.Ticket.CreateTicketForSeatAsync(seatId, ticket, trackChanges: false);
+            var baseResult = await _sender.Send(new CreateTicketCommand(seatId, ticket, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -62,7 +64,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteTicket(Guid seatId, Guid id)
         {
-            var baseResult = await _service.Ticket.DeleteTicketAsync(seatId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteTicketCommand(seatId, id ,TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -74,7 +76,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateTicket(Guid seatId, Guid id, [FromBody] TicketForUpdateDto ticket)
         {
-            var baseResult = await _service.Ticket.UpdateTicketAsync(seatId, id, ticket, seatTrackChanges: false, tickTrackChanges: true);
+            var baseResult = await _sender.Send(new UpdateTicketCommand(seatId, id, ticket, SeatTrackChanges: false, TickTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

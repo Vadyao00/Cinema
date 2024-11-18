@@ -41,5 +41,21 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(s => s.ShowtimeId.Equals(id), trackChanges)
                   .Include(s => s.Movie)
                   .SingleOrDefaultAsync();
+
+        public async Task<PagedList<Showtime>> GetAllShowtimesAsync(ShowtimeParameters showtimeParameters, bool trackChanges)
+        {
+            var showtimes = await FindAll(trackChanges)
+                  .FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
+                  .Search(showtimeParameters.searchTitle)
+                  .Include(s => s.Movie)
+                  .Sort(showtimeParameters.OrderBy)
+                  .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)
+                  .Take(showtimeParameters.PageSize)
+                  .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<Showtime>(showtimes, count, showtimeParameters.PageNumber, showtimeParameters.PageSize);
+        }
     }
 }

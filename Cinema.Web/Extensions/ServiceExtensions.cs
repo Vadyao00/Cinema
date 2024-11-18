@@ -63,7 +63,7 @@ namespace Cinema.API.Extensions
             var jwtConfiguration = new JwtConfiguration();
             configuration.Bind(jwtConfiguration.Section, jwtConfiguration);
 
-            var secretKey = Environment.GetEnvironmentVariable("SECRET");
+            var secretKey = configuration.GetValue<string>("SECRET");
 
             services.AddAuthentication(opt =>
             {

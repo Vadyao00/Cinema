@@ -1,8 +1,11 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.ActorsCommands;
+using Cinema.Application.Queries.ActorsQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -15,14 +18,14 @@ namespace Cinema.Controllers.Controllers
     [ApiExplorerSettings(GroupName = "v1")]
     public class ActorsController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public ActorsController(IServiceManager service) => _service = service;
+        public ActorsController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetActors([FromQuery]ActorParameters actorParameters)
         {
-            var baseResult = await _service.Actor.GetAllActorsAsync(actorParameters, trackChanges: false);
+            var baseResult = await _sender.Send(new GetActorsQuery(actorParameters, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -36,7 +39,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "ActorById")]
         public async Task<IActionResult> GetActor(Guid id)
         {
-            var baseResult = await _service.Actor.GetActorAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetActorQuery(id, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -50,7 +53,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateActor([FromBody] ActorForCreationDto actor)
         {
-            var createdActor = await _service.Actor.CreateActorAsync(actor);
+            var createdActor = await _sender.Send(new CreateActorCommand(actor));
 
             return CreatedAtRoute("ActorById", new { id = createdActor.ActorId }, createdActor);
         }
@@ -59,7 +62,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteActor(Guid id)
         {
-            var baseResult = await _service.Actor.DeleteActorAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteActorCommand(id, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -71,7 +74,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateActor(Guid id, [FromBody] ActorForUpdateDto actor)
         {
-            var baseResult = await _service.Actor.UpdateActorAsync(id, actor , trackChanges: true);
+            var baseResult = await _sender.Send(new UpdateActorCommand(id,actor, TrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

@@ -16,6 +16,21 @@ namespace Cinema.Persistence.Repositories
 
         public void DeleteWorkLog(WorkLog workLog) => Delete(workLog);
 
+        public async Task<PagedList<WorkLog>> GetAllWorkLogsAsync(WorkLogParameters workLogParameters, bool trackChanges)
+        {
+            var workLogs = await FindAll(trackChanges)
+                  .Search(workLogParameters.searchName)
+                  .Include(w => w.Employee)
+                  .Sort(workLogParameters.OrderBy)
+                  .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)
+                  .Take(workLogParameters.PageSize)
+                  .ToListAsync();
+
+            var count = await FindAll(trackChanges).CountAsync();
+
+            return new PagedList<WorkLog>(workLogs, count, workLogParameters.PageNumber, workLogParameters.PageSize);
+        }
+
         public async Task<PagedList<WorkLog>> GetAllWorkLogsForEmployeeAsync(WorkLogParameters workLogParameters, Guid employeeId, bool trackChanges)
         {
             var workLogs = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)

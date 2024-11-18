@@ -6,6 +6,7 @@ namespace Contracts.IRepositories
     public interface IShowtimeRepository
     {
         Task<PagedList<Showtime>> GetAllShowtimesForMovieAsync(ShowtimeParameters showtimeParameters, Guid movieId, bool trackChanges);
+        Task<PagedList<Showtime>> GetAllShowtimesAsync(ShowtimeParameters showtimeParameters, bool trackChanges);
         Task<Showtime> GetShowtimeForMovieAsync(Guid movieId, Guid id, bool trackChanges);
         Task<Showtime> GetShowtimeAsync(Guid id, bool trackChanges);
         void CreateShowtimeForMovie(Guid movieId, Showtime showtime);

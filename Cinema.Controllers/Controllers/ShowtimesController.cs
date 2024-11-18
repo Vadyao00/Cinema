@@ -1,8 +1,10 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.ShowtimesCommands;
+using Cinema.Application.Queries.ShowtimesQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
-using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +16,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class ShowtimesController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public ShowtimesController(IServiceManager service) => _service = service;
+        public ShowtimesController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetShowtimesForMovie([FromQuery]ShowtimeParameters showtimeParameters, Guid genreId, Guid movieId)
         {
-            var baseResult = await _service.Showtime.GetAllShowtimesAsync(showtimeParameters, genreId, movieId, trackChanges: false);
+            var baseResult = await _sender.Send(new GetShowtimesQuery(showtimeParameters, genreId, movieId, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +37,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GetShowtimeById")]
         public async Task<IActionResult> GetShowtimeForMovie(Guid genreId, Guid movieId, Guid id)
         {
-            var baseResult = await _service.Showtime.GetShowtimeAsync(genreId, movieId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetShowtimeQuery(genreId, movieId, id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +51,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateShowtimeForMovie(Guid genreId, Guid movieId, [FromBody] ShowtimeForCreationDto showtime)
         {
-            var baseResult = await _service.Showtime.CreateShowtimeForMovieAsync(genreId, movieId, showtime, trackChanges: false);
+            var baseResult = await _sender.Send(new CreateShowtimeCommand(genreId, movieId, showtime, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -62,7 +64,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteShowtimeForMovie(Guid genreId, Guid movieId, Guid id)
         {
-            var baseResult = await _service.Showtime.DeleteShowtimeAsync(genreId, movieId, id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteShowtimeCommand(genreId, movieId, id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -74,7 +76,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateShowtimeForMovie(Guid genreId, Guid movieId, Guid id, [FromBody] ShowtimeForUpdateDto showtime)
         {
-            var baseResult = await _service.Showtime.UpdateShowtimeAsync(genreId, movieId, id, showtime, movTrackChanges: false, shwTrackChanges: true);
+            var baseResult = await _sender.Send(new UpdateShowtimeCommand(genreId, movieId, id, showtime, MovTrackChanges: false, ShwTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

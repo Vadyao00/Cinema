@@ -1,8 +1,11 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.EventsCommands;
+using Cinema.Application.Queries.EventsQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
 using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +17,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class EventsController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public EventsController(IServiceManager service) => _service = service;
+        public EventsController(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetEvents([FromQuery]EventParameters eventParameters)
         {
-            var baseResult = await _service.Event.GetAllEventsAsync(eventParameters, trackChanges: false);
+            var baseResult = await _sender.Send(new GetEventsQuery(eventParameters, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +38,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "EventById")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
-            var baseResult = await _service.Event.GetEventAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetEventQuery(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +52,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateEvent([FromBody] EventForCreationDto eevent)
         {
-            var createdEvent = await _service.Event.CreateEventAsync(eevent);
+            var createdEvent = await _sender.Send(new CreateEventCommand(eevent));
 
             return CreatedAtRoute("EventById", new { id = createdEvent.EventId }, createdEvent);
         }
@@ -58,7 +61,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteEvent(Guid id)
         {
-            var baseResult = await _service.Event.DeleteEventAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteEventCommand(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -68,9 +71,9 @@ namespace Cinema.Controllers.Controllers
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] EventForUpdateDto actor)
+        public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] EventForUpdateDto eevent)
         {
-            var baseResult = await _service.Event.UpdateEventAsync(id, actor, trackChanges: true);
+            var baseResult = await _sender.Send(new UpdateEventCommand(id, eevent, TrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

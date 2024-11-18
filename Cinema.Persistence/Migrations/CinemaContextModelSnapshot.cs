@@ -412,13 +412,13 @@ namespace Cinema.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1e1f08bb-628f-4037-991a-0f44d8d0f7bf",
+                            Id = "45a541e7-e897-4ebd-8856-5aaa504256f1",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "1a474b86-bd85-4c4f-9177-3cfeb709ab1e",
+                            Id = "6f24a3cb-ff2b-45b2-9672-58e5ea7f4fb1",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

@@ -1,8 +1,10 @@
-﻿using Cinema.Controllers.Extensions;
+﻿using Cinema.Application.Commands.SeatsCommands;
+using Cinema.Application.Queries.SeatsQueries;
+using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
-using Contracts.IServices;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -14,14 +16,14 @@ namespace Cinema.Controllers.Controllers
     [Authorize]
     public class SeatsControllers : ApiControllerBase
     {
-        private readonly IServiceManager _service;
+        private readonly ISender _sender;
 
-        public SeatsControllers(IServiceManager service) => _service = service;
+        public SeatsControllers(ISender sender) => _sender = sender;
 
         [HttpGet]
         public async Task<IActionResult> GetSeats([FromQuery]SeatParameters seatParameters)
         {
-            var baseResult = await _service.Seat.GetAllSeatsAsync(seatParameters, trackChanges: false);
+            var baseResult = await _sender.Send(new GetSeatsQuery(seatParameters, TrackChanges:false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,7 +37,7 @@ namespace Cinema.Controllers.Controllers
         [HttpGet("{id:guid}", Name = "GetSeatById")]
         public async Task<IActionResult> GetSeat(Guid id)
         {
-            var baseResult = await _service.Seat.GetSeatAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new GetSeatQuery(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -49,7 +51,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateSeatForShowtime(Guid showtimeId, [FromBody] SeatForCreationDto seat)
         {
-            var baseResult = await _service.Seat.CreateSeatForShowtimeOrEventAsync(showtimeId, null, seat, trackChanges: false);
+            var baseResult = await _sender.Send(new CreateSeatCommand(showtimeId, null , seat, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -63,7 +65,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateSeatForEvent(Guid eventId, [FromBody] SeatForCreationDto seat)
         {
-            var baseResult = await _service.Seat.CreateSeatForShowtimeOrEventAsync(null, eventId, seat, trackChanges: false);
+            var baseResult = await _sender.Send(new CreateSeatCommand(null, eventId, seat, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -76,7 +78,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteSeat(Guid id)
         {
-            var baseResult = await _service.Seat.DeleteSeatAsync(id, trackChanges: false);
+            var baseResult = await _sender.Send(new DeleteSeatCommand(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -88,7 +90,7 @@ namespace Cinema.Controllers.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateSeat(Guid id, [FromBody] SeatForUpdateDto seat)
         {
-            var baseResult = await _service.Seat.UpdateSeatAsync(id, seat, seatTrackChanges: true);
+            var baseResult = await _sender.Send(new UpdateSeatCommand(id, seat, SeatTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
