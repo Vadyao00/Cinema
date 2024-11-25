@@ -2,7 +2,6 @@
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Contracts.IServices;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema.Controllers.Controllers
