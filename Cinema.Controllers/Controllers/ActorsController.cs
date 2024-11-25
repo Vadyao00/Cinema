@@ -4,7 +4,6 @@ using Cinema.Controllers.Extensions;
 using Cinema.Controllers.Filters;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.RequestFeatures;
-using Contracts.IServices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +31,9 @@ namespace Cinema.Controllers.Controllers
             var (actors, metaData) = baseResult.GetResult<(IEnumerable<ActorDto>, MetaData)>();
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            ViewBag.ActorParameters = actorParameters;
+            ViewBag.MetaData = metaData;
 
             return Ok(actors);
         }

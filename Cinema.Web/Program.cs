@@ -37,7 +37,13 @@ namespace Cinema.API
 
             ConfigureApp(app);
 
-            app.MapControllers();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
+
+            //app.MapControllers();
 
             app.Run();
         }
@@ -81,6 +87,7 @@ namespace Cinema.API
             services.ConfigureJWT(configuration);
             services.AddJwtConfiguration(configuration);
             services.AddAuthorization();
+            services.AddRazorPages();
         }
 
         public static void ConfigureApp(IApplicationBuilder app)

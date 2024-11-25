@@ -10,7 +10,10 @@ namespace Cinema.Controllers.Filters
         {
         }
 
-        public void OnActionExecuted(ActionExecutedContext context) { }
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            
+        }
 
         public void OnActionExecuting(ActionExecutingContext context)
         {

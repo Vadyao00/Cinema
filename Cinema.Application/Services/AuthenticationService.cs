@@ -6,7 +6,6 @@ using Cinema.Domain.Responses;
 using Cinema.LoggerService;
 using Contracts.IServices;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -42,7 +41,7 @@ namespace Cinema.Application.Services
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
 
             if (result.Succeeded)
-                await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
+                await _userManager.AddToRoleAsync(user, userForRegistration.UserRole);
 
             return new ApiOkResponse<IdentityResult>(result);
         }
