@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ActorsHandlers
 {
-    internal sealed class DeleteActorHandler : IRequestHandler<DeleteActorCommand, ApiBaseResponse>
+    public sealed class DeleteActorHandler : IRequestHandler<DeleteActorCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         public DeleteActorHandler(IRepositoryManager repository) => _repository = repository;

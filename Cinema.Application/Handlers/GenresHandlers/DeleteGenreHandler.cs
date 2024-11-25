@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.GenresHandlers
 {
-    internal sealed class DeleteGenreHandler : IRequestHandler<DeleteGenreCommand, ApiBaseResponse>
+    public sealed class DeleteGenreHandler : IRequestHandler<DeleteGenreCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

@@ -29,7 +29,7 @@ namespace Cinema.Persistence.Repositories
                   .Take(seatParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).FilterSeats(seatParameters.MinSeatNumber, seatParameters.MaxSeatNumber).CountAsync();
 
             return new PagedList<Seat>(seats, count, seatParameters.PageNumber, seatParameters.PageSize);
         }

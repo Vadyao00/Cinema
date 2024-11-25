@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EmployeesHandlers
 {
-    internal sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, EmployeeDto>
+    public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, EmployeeDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

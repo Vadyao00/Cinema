@@ -21,7 +21,7 @@ namespace Cinema.Persistence.Repositories
                   .Take(genreParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).Search(genreParameters.searchName).CountAsync();
 
             return new PagedList<Genre>(genres, count, genreParameters.PageNumber, genreParameters.PageSize);
         }

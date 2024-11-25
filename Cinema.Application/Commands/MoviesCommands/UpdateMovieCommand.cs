@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Cinema.Application.Commands.MoviesCommands
 {
-    public sealed record UpdateMovieCommand(Guid GenreId, Guid Id, MovieForUpdateDto MovieForUpdate, bool GenrTrackChanges, bool MovTrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record UpdateMovieCommand(Guid Id, MovieForUpdateDto MovieForUpdate, bool GenrTrackChanges, bool MovTrackChanges) : IRequest<ApiBaseResponse>;
 }

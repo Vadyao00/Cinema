@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.WorkLogsHandlers
 {
-    internal sealed class DeleteWorkLogHandler : IRequestHandler<DeleteWorkLogCommand, ApiBaseResponse>
+    public sealed class DeleteWorkLogHandler : IRequestHandler<DeleteWorkLogCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

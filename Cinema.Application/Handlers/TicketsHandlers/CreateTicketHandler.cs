@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.TicketsHandlers
 {
-    internal sealed class CreateTicketHandler : IRequestHandler<CreateTicketCommand, ApiBaseResponse>
+    public sealed class CreateTicketHandler : IRequestHandler<CreateTicketCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

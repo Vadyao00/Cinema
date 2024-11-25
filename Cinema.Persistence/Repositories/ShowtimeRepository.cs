@@ -53,7 +53,8 @@ namespace Cinema.Persistence.Repositories
                   .Take(showtimeParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
+                  .Search(showtimeParameters.searchTitle).CountAsync();
 
             return new PagedList<Showtime>(showtimes, count, showtimeParameters.PageNumber, showtimeParameters.PageSize);
         }

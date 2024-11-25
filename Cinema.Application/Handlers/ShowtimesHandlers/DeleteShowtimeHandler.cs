@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ShowtimesHandlers
 {
-    internal sealed class DeleteShowtimeHandler : IRequestHandler<DeleteShowtimeCommand, ApiBaseResponse>
+    public sealed class DeleteShowtimeHandler : IRequestHandler<DeleteShowtimeCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
 
         public async Task<ApiBaseResponse> Handle(DeleteShowtimeCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _repository.Movie.GetMovieAsync(request.GenreId, request.MovieId, request.TrackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.TrackChanges);
             if (movie is null)
                 return new MovieNotFoundResponse(request.MovieId);
 

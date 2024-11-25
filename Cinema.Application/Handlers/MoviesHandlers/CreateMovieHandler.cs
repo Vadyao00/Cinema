@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.MoviesHandlers
 {
-    internal sealed class CreateMovieHandler : IRequestHandler<CreateMovieCommand, ApiBaseResponse>
+    public sealed class CreateMovieHandler : IRequestHandler<CreateMovieCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

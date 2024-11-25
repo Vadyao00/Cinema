@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.MoviesHandlers
 {
-    internal sealed class DeleteMovieHandler : IRequestHandler<DeleteMovieCommand, ApiBaseResponse>
+    public sealed class DeleteMovieHandler : IRequestHandler<DeleteMovieCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -20,11 +20,7 @@ namespace Cinema.Application.Handlers.MoviesHandlers
 
         public async Task<ApiBaseResponse> Handle(DeleteMovieCommand request, CancellationToken cancellationToken)
         {
-            var genre = await _repository.Genre.GetGenreAsync(request.GenreId, request.TrackChanges);
-            if (genre is null)
-                return new GenreNotFoundResponse(request.GenreId);
-
-            var movieDb = await _repository.Movie.GetMovieAsync(request.GenreId, request.Id, request.TrackChanges);
+            var movieDb = await _repository.Movie.GetMovieAsync(request.Id, request.TrackChanges);
             if (movieDb is null)
                 return new MovieNotFoundResponse(request.Id);
 

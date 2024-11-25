@@ -27,7 +27,8 @@ namespace Cinema.Persistence.Repositories
                   .Take(movieParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).FilterMovies(movieParameters.MinAgeRestriction, movieParameters.MaxAgeRestriction)
+                  .Search(movieParameters.searchTitle).CountAsync();
 
             return new PagedList<Movie>(movies, count, movieParameters.PageNumber, movieParameters.PageSize);
         }
@@ -48,8 +49,8 @@ namespace Cinema.Persistence.Repositories
             return new PagedList<Movie>(movies, count, movieParameters.PageNumber, movieParameters.PageSize);
         }
 
-        public async Task<Movie> GetMovieAsync(Guid genreId, Guid id, bool trackChanges) =>
-            await FindByCondition(m => m.MovieId.Equals(id) && m.GenreId.Equals(genreId), trackChanges)
+        public async Task<Movie> GetMovieAsync(Guid id, bool trackChanges) =>
+            await FindByCondition(m => m.MovieId.Equals(id), trackChanges)
                   .Include(m => m.Genre)
                   .SingleOrDefaultAsync();
     }

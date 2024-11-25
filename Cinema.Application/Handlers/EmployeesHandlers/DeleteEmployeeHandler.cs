@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EmployeesHandlers
 {
-    internal sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeCommand, ApiBaseResponse>
+    public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

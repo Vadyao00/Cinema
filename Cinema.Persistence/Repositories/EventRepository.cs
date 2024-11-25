@@ -22,7 +22,8 @@ namespace Cinema.Persistence.Repositories
                   .Take(eventParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).FilterEvents(eventParameters.MinTicketPrice, eventParameters.MaxTicketPrice, eventParameters.StartTime, eventParameters.EndTime)
+                  .Search(eventParameters.searchName).CountAsync();
 
             return new PagedList<Event>(events, count, eventParameters.PageNumber, eventParameters.PageSize);
         }

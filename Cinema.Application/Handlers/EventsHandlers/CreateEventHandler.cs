@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EventsHandlers
 {
-    internal sealed class CreateEventHandler : IRequestHandler<CreateEventCommand, EventDto>
+    public sealed class CreateEventHandler : IRequestHandler<CreateEventCommand, EventDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

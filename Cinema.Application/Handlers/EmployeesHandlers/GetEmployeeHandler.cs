@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EmployeesHandlers
 {
-    internal sealed class GetEmployeeHandler : IRequestHandler<GetEmployeeQuery, ApiBaseResponse>
+    public sealed class GetEmployeeHandler : IRequestHandler<GetEmployeeQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

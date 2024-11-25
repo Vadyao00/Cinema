@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EventsHandlers
 {
-    internal sealed class UpdateEventHandler : IRequestHandler<UpdateEventCommand, ApiBaseResponse>
+    public sealed class UpdateEventHandler : IRequestHandler<UpdateEventCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

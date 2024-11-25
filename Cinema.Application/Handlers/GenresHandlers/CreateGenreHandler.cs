@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.GenresHandlers
 {
-    internal sealed class CreateGenreHandler : IRequestHandler<CreateGenreCommand, GenreDto>
+    public sealed class CreateGenreHandler : IRequestHandler<CreateGenreCommand, GenreDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

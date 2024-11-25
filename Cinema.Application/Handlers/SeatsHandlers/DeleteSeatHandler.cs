@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.SeatsHandlers
 {
-    internal sealed class DeleteSeatHandler : IRequestHandler<DeleteSeatCommand, ApiBaseResponse>
+    public sealed class DeleteSeatHandler : IRequestHandler<DeleteSeatCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

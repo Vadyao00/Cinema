@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ActorsHandlers
 {
-    internal sealed class CreateActorHandler : IRequestHandler<CreateActorCommand, ActorDto>
+    public sealed class CreateActorHandler : IRequestHandler<CreateActorCommand, ActorDto>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

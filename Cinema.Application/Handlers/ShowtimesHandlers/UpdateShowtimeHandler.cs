@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ShowtimesHandlers
 {
-    internal sealed class UpdateShowtimeHandler : IRequestHandler<UpdateShowtimeCommand, ApiBaseResponse>
+    public sealed class UpdateShowtimeHandler : IRequestHandler<UpdateShowtimeCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
 
         public async Task<ApiBaseResponse> Handle(UpdateShowtimeCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _repository.Movie.GetMovieAsync(request.GenreId, request.MovieId, request.MovTrackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.MovTrackChanges);
             if (movie is null)
                 return new MovieNotFoundResponse(request.MovieId);
 

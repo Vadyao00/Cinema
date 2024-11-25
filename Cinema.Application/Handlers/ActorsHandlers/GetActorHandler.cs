@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ActorsHandlers
 {
-    internal sealed class GetActorHandler : IRequestHandler<GetActorQuery, ApiBaseResponse>
+    public sealed class GetActorHandler : IRequestHandler<GetActorQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

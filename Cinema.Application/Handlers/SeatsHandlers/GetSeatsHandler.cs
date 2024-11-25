@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.SeatsHandlers
 {
-    internal sealed class GetSeatsHandler : IRequestHandler<GetSeatsQuery, ApiBaseResponse>
+    public sealed class GetSeatsHandler : IRequestHandler<GetSeatsQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

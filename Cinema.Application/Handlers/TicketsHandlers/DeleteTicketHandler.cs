@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.TicketsHandlers
 {
-    internal sealed class DeleteTicketHandler : IRequestHandler<DeleteTicketCommand, ApiBaseResponse>
+    public sealed class DeleteTicketHandler : IRequestHandler<DeleteTicketCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

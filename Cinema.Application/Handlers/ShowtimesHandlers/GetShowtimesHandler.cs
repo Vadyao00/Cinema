@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.ShowtimesHandlers
 {
-    internal sealed class GetShowtimesHandler : IRequestHandler<GetShowtimesQuery, ApiBaseResponse>
+    public sealed class GetShowtimesHandler : IRequestHandler<GetShowtimesQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
             if (!request.ShowtimeParameters.ValidTimeRange)
                 return new TimeRangeBadRequestResponse();
 
-            var movie = await _repository.Movie.GetMovieAsync(request.GenreId, request.MovieId, request.TrackChanges);
+            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.TrackChanges);
             if (movie is null)
                 return new MovieNotFoundResponse(request.MovieId);
 

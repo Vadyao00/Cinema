@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.WorkLogsHandlers
 {
-    internal sealed class GetWorkLogsHandler : IRequestHandler<GetWorkLogsQuery, ApiBaseResponse>
+    public sealed class GetWorkLogsHandler : IRequestHandler<GetWorkLogsQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;

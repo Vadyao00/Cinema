@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.MoviesHandlers
 {
-    internal sealed class UpdateMovieHandler : IRequestHandler<UpdateMovieCommand, ApiBaseResponse>
+    public sealed class UpdateMovieHandler : IRequestHandler<UpdateMovieCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -20,11 +20,7 @@ namespace Cinema.Application.Handlers.MoviesHandlers
 
         public async Task<ApiBaseResponse> Handle(UpdateMovieCommand request, CancellationToken cancellationToken)
         {
-            var genre = await _repository.Genre.GetGenreAsync(request.GenreId, request.GenrTrackChanges);
-            if (genre is null)
-                return new GenreNotFoundResponse(request.GenreId);
-
-            var movieDb = await _repository.Movie.GetMovieAsync(request.GenreId, request.Id, request.MovTrackChanges);
+            var movieDb = await _repository.Movie.GetMovieAsync(request.Id, request.MovTrackChanges);
             if (movieDb is null)
                 return new MovieNotFoundResponse(request.Id);
 

@@ -26,7 +26,7 @@ namespace Cinema.Persistence.Repositories
                   .Take(workLogParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).CountAsync();
+            var count = await FindAll(trackChanges).Search(workLogParameters.searchName).CountAsync();
 
             return new PagedList<WorkLog>(workLogs, count, workLogParameters.PageNumber, workLogParameters.PageSize);
         }

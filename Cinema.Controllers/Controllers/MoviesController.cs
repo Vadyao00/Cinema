@@ -13,7 +13,7 @@ using System.Text.Json;
 namespace Cinema.Controllers.Controllers
 {
     [ApiController]
-    [Route("api/genres/{genreId}/movies")]
+    [Route("api/movies")]
     [Authorize]
     public class MoviesController : ApiControllerBase
     {
@@ -22,9 +22,9 @@ namespace Cinema.Controllers.Controllers
         public MoviesController(ISender sender) => _sender = sender;
 
         [HttpGet]
-        public async Task<IActionResult> GetMoviesForGenre([FromQuery]MovieParameters movieParameters, Guid genreId)
+        public async Task<IActionResult> GetMovies([FromQuery]MovieParameters movieParameters)
         {
-            var baseResult = await _sender.Send(new GetMoviesQuery(movieParameters, genreId, TrackChanges: false));
+            var baseResult = await _sender.Send(new GetMoviesQuery(movieParameters, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -36,9 +36,9 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "GetMovieById")]
-        public async Task<IActionResult> GetMovieForGenre(Guid genreId, Guid id)
+        public async Task<IActionResult> GetMovie(Guid id)
         {
-            var baseResult = await _sender.Send(new GetMovieQuery(genreId, id, TrackChanges: false));
+            var baseResult = await _sender.Send(new GetMovieQuery(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -47,7 +47,7 @@ namespace Cinema.Controllers.Controllers
             return Ok(movie);
         }
 
-        [HttpPost]
+        [HttpPost("{genreId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateMovieForGenre(Guid genreId, [FromBody] MovieForCreationDto movie)
@@ -58,14 +58,14 @@ namespace Cinema.Controllers.Controllers
 
             var createdMovie = baseResult.GetResult<MovieDto>();
 
-            return CreatedAtRoute("GetMovieById", new { genreId = genreId, id = createdMovie.MovieId }, createdMovie);
+            return CreatedAtRoute("GetMovieById", new {id = createdMovie.MovieId }, createdMovie);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteMovieForGenre(Guid genreId, Guid id)
+        public async Task<IActionResult> DeleteMovie(Guid id)
         {
-            var baseResult = await _sender.Send(new DeleteMovieCommand(genreId, id , TrackChanges: false));
+            var baseResult = await _sender.Send(new DeleteMovieCommand(id , TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -75,9 +75,9 @@ namespace Cinema.Controllers.Controllers
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> UpdateMovieForGenre(Guid genreId, Guid id, [FromBody] MovieForUpdateDto movie)
+        public async Task<IActionResult> UpdateMovie(Guid id, [FromBody] MovieForUpdateDto movie)
         {
-            var baseResult = await _sender.Send(new UpdateMovieCommand(genreId, id, movie, GenrTrackChanges:false, MovTrackChanges: true));
+            var baseResult = await _sender.Send(new UpdateMovieCommand(id, movie, GenrTrackChanges:false, MovTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.MoviesHandlers
 {
-    internal sealed class GetMoviesHandler : IRequestHandler<GetMoviesQuery, ApiBaseResponse>
+    public sealed class GetMoviesHandler : IRequestHandler<GetMoviesQuery, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -24,11 +24,7 @@ namespace Cinema.Application.Handlers.MoviesHandlers
             if (!request.MovieParameters.ValidAgeRestriction)
                 return new AgeRestrictionBadRequestResponse();
 
-            var genre = await _repository.Genre.GetGenreAsync(request.GenreId, request.TrackChanges);
-            if (genre is null)
-                return new GenreNotFoundResponse(request.GenreId);
-
-            var moviesWithMetaData = await _repository.Movie.GetAllMoviesForGenreAsync(request.MovieParameters, request.GenreId, request.TrackChanges);
+            var moviesWithMetaData = await _repository.Movie.GetAllMoviesAsync(request.MovieParameters, request.TrackChanges);
             var moviesDto = _mapper.Map<IEnumerable<MovieDto>>(moviesWithMetaData);
 
             return new ApiOkResponse<(IEnumerable<MovieDto>, MetaData)>((moviesDto, moviesWithMetaData.MetaData));
