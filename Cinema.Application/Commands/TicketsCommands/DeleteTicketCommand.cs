@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Cinema.Application.Commands.TicketsCommands
 {
-    public sealed record DeleteTicketCommand(Guid SeatId, Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record DeleteTicketCommand(Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
 }

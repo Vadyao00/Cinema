@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Cinema.Application.Queries.TicketsQueries
 {
-    public sealed record GetTicketsQuery(TicketParameters TicketParameters, Guid SeatId, bool TrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record GetTicketsQuery(TicketParameters TicketParameters, bool TrackChanges) : IRequest<ApiBaseResponse>;
 }

@@ -9,5 +9,6 @@ namespace Contracts.IRepositories
         Task<Event> GetEventAsync(Guid id, bool trackChanges);
         void CreateEvent(Event eevent);
         void DeleteEvent(Event eevent);
+        Task<IEnumerable<Event>> GetEventsByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

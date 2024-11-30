@@ -26,11 +26,7 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
             if (!request.ShowtimeParameters.ValidTimeRange)
                 return new TimeRangeBadRequestResponse();
 
-            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.TrackChanges);
-            if (movie is null)
-                return new MovieNotFoundResponse(request.MovieId);
-
-            var showtimesWithMetaData = await _repository.Showtime.GetAllShowtimesForMovieAsync(request.ShowtimeParameters, request.MovieId, request.TrackChanges);
+            var showtimesWithMetaData = await _repository.Showtime.GetAllShowtimesAsync(request.ShowtimeParameters, request.TrackChanges);
             var showtimesDto = _mapper.Map<IEnumerable<ShowtimeDto>>(showtimesWithMetaData);
 
             return new ApiOkResponse<(IEnumerable<ShowtimeDto>, MetaData)>((showtimesDto, showtimesWithMetaData.MetaData));

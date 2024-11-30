@@ -21,6 +21,8 @@ namespace Cinema.Persistence.Repositories
         {
             var seats = await FindAll(trackChanges)
                   .FilterSeats(seatParameters.MinSeatNumber, seatParameters.MaxSeatNumber)
+                  .SearchByEvent(seatParameters.searchEventName)
+                  .SearchByShowtime(seatParameters.searchShowtimeName)
                   .Include(s => s.Event)
                   .Include(s => s.Showtime)
                   .Include(s => s.Showtime!.Movie)
@@ -29,7 +31,8 @@ namespace Cinema.Persistence.Repositories
                   .Take(seatParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).FilterSeats(seatParameters.MinSeatNumber, seatParameters.MaxSeatNumber).CountAsync();
+            var count = await FindAll(trackChanges).FilterSeats(seatParameters.MinSeatNumber, seatParameters.MaxSeatNumber).SearchByEvent(seatParameters.searchEventName)
+                  .SearchByShowtime(seatParameters.searchShowtimeName).CountAsync();
 
             return new PagedList<Seat>(seats, count, seatParameters.PageNumber, seatParameters.PageSize);
         }

@@ -20,10 +20,6 @@ namespace Cinema.Application.Handlers.TicketsHandlers
 
         public async Task<ApiBaseResponse> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
         {
-            var seat = await _repository.Seat.GetSeatAsync(request.SeatId, request.TrackChanges);
-            if (seat is null)
-                return new SeatNotFoundResponse(request.SeatId);
-
             var ticket = await _repository.Ticket.GetTicketAsync(request.Id, request.TrackChanges);
             if (ticket is null)
                 return new TicketNotFoundResponse(request.Id);

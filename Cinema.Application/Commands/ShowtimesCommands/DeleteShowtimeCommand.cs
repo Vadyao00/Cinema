@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Cinema.Application.Commands.ShowtimesCommands
 {
-    public sealed record DeleteShowtimeCommand(Guid GenreId, Guid MovieId, Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record DeleteShowtimeCommand(Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
 }

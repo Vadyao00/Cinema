@@ -8,17 +8,23 @@ namespace Cinema.API
     {
         public MappingProfile()
         {
-            CreateMap<Actor, ActorDto>();
-            CreateMap<Employee, EmployeeDto>();
-            CreateMap<Event, EventDto>();
+            CreateMap<Actor, ActorDto>().ForMember(a => a.Movies,
+                opt => opt.MapFrom(x => string.Join(", ",x.Movies.Select(m => m.Title))));
+            CreateMap<Employee, EmployeeDto>().ForMember(e => e.Showtimes,
+                opt => opt.MapFrom(x => string.Join(", ", x.Showtimes.Select(m => m.Movie.Title)))).ForMember
+                (e => e.Events, opt => opt.MapFrom(x => string.Join(", ", x.Events.Select(m => m.Name))));
+            CreateMap<Event, EventDto>().ForMember(e => e.Employees,
+                opt => opt.MapFrom(x => string.Join(", ", x.Employees.Select(m => m.Name))));
             CreateMap<Genre, GenreDto>();
             CreateMap<Movie, MovieDto>().ForMember(m => m.GenreName,
-                opt => opt.MapFrom(x => x.Genre.Name));
+                opt => opt.MapFrom(x => x.Genre.Name)).ForMember(m => m.Actors,
+                opt => opt.MapFrom(x => string.Join(", ", x.Actors.Select(a => a.Name))));
             CreateMap<Seat, SeatDto>().ForMember(s => s.EventName,
                 opt => opt.MapFrom(x => x.Event!.Name)).ForMember(s => s.ShowtimeName,
                 opt => opt.MapFrom(x => x.Showtime!.Movie.Title));
             CreateMap<Showtime, ShowtimeDto>().ForMember(s => s.MovieTitle,
-                opt => opt.MapFrom(x => x.Movie.Title));
+                opt => opt.MapFrom(x => x.Movie.Title)).ForMember(e => e.Employees,
+                opt => opt.MapFrom(g => string.Join(", ", g.Employees.Select(m => m.Name)))); ;
             CreateMap<Ticket, TicketDto>().ForMember(t => t.SeatNumber,
                 opt => opt.MapFrom(x => x.Seat.SeatNumber));
             CreateMap<WorkLog, WorkLogDto>().ForMember(w => w.EmployeeName,

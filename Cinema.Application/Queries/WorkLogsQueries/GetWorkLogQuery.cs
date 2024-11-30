@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Cinema.Application.Queries.WorkLogsQueries
 {
-    public sealed record GetWorkLogQuery(Guid EmployeeId, Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record GetWorkLogQuery(Guid Id, bool TrackChanges) : IRequest<ApiBaseResponse>;
 }

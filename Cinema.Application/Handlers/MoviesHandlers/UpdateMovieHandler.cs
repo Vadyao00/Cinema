@@ -24,6 +24,9 @@ namespace Cinema.Application.Handlers.MoviesHandlers
             if (movieDb is null)
                 return new MovieNotFoundResponse(request.Id);
 
+            var actors = await _repository.Actor.GetActorsByIdsAsync(request.MovieForUpdate.ActorsIds, trackChanges: false);
+            movieDb.Actors = actors.ToList();
+
             _mapper.Map(request.MovieForUpdate, movieDb);
             await _repository.SaveAsync();
 

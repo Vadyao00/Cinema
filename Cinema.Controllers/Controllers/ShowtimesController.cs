@@ -12,7 +12,7 @@ using System.Text.Json;
 namespace Cinema.Controllers.Controllers
 {
     [ApiController]
-    [Route("api/genres/{genreId:guid}/movies/{movieId:guid}/showtimes")]
+    [Route("api/showtimes")]
     [Authorize]
     public class ShowtimesController : ApiControllerBase
     {
@@ -21,9 +21,9 @@ namespace Cinema.Controllers.Controllers
         public ShowtimesController(ISender sender) => _sender = sender;
 
         [HttpGet]
-        public async Task<IActionResult> GetShowtimesForMovie([FromQuery]ShowtimeParameters showtimeParameters, Guid genreId, Guid movieId)
+        public async Task<IActionResult> GetShowtimes([FromQuery]ShowtimeParameters showtimeParameters)
         {
-            var baseResult = await _sender.Send(new GetShowtimesQuery(showtimeParameters, genreId, movieId, TrackChanges: false));
+            var baseResult = await _sender.Send(new GetShowtimesQuery(showtimeParameters, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,9 +35,9 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "GetShowtimeById")]
-        public async Task<IActionResult> GetShowtimeForMovie(Guid genreId, Guid movieId, Guid id)
+        public async Task<IActionResult> GetShowtimeForMovie(Guid id)
         {
-            var baseResult = await _sender.Send(new GetShowtimeQuery(genreId, movieId, id, TrackChanges: false));
+            var baseResult = await _sender.Send(new GetShowtimeQuery(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -46,25 +46,25 @@ namespace Cinema.Controllers.Controllers
             return Ok(showtime);
         }
 
-        [HttpPost]
+        [HttpPost("{movieId}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> CreateShowtimeForMovie(Guid genreId, Guid movieId, [FromBody] ShowtimeForCreationDto showtime)
+        public async Task<IActionResult> CreateShowtimeForMovie(Guid movieId, [FromBody] ShowtimeForCreationDto showtime)
         {
-            var baseResult = await _sender.Send(new CreateShowtimeCommand(genreId, movieId, showtime, TrackChanges: false));
+            var baseResult = await _sender.Send(new CreateShowtimeCommand(movieId, showtime, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
             var createdShowtime = baseResult.GetResult<ShowtimeDto>();
 
-            return CreatedAtRoute("GetShowtimeById", new { genreId = genreId, movieId = movieId, id = createdShowtime.ShowtimeId }, createdShowtime);
+            return CreatedAtRoute("GetShowtimeById", new { id = createdShowtime.ShowtimeId }, createdShowtime);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteShowtimeForMovie(Guid genreId, Guid movieId, Guid id)
+        public async Task<IActionResult> DeleteShowtime(Guid id)
         {
-            var baseResult = await _sender.Send(new DeleteShowtimeCommand(genreId, movieId, id, TrackChanges: false));
+            var baseResult = await _sender.Send(new DeleteShowtimeCommand(id, TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -74,9 +74,9 @@ namespace Cinema.Controllers.Controllers
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> UpdateShowtimeForMovie(Guid genreId, Guid movieId, Guid id, [FromBody] ShowtimeForUpdateDto showtime)
+        public async Task<IActionResult> UpdateShowtimeForMovie(Guid id, [FromBody] ShowtimeForUpdateDto showtime)
         {
-            var baseResult = await _sender.Send(new UpdateShowtimeCommand(genreId, movieId, id, showtime, MovTrackChanges: false, ShwTrackChanges: true));
+            var baseResult = await _sender.Send(new UpdateShowtimeCommand(id, showtime, MovTrackChanges: false, ShwTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

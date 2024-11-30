@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cinema.Application.Commands.EventsCommands;
+using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Responses;
 using Contracts.IRepositories;
@@ -23,6 +24,9 @@ namespace Cinema.Application.Handlers.EventsHandlers
             var eevent = await _repository.Event.GetEventAsync(request.Id, request.TrackChanges);
             if (eevent is null)
                 return new EventNotFoundResponse(request.Id);
+
+            var employees = await _repository.Employee.GetEmployeesByIdsAsync(request.EventForUpdateDto.EmployeesIds, trackChanges: false);
+            eevent.Employees = employees.ToList();
 
             _mapper.Map(request.EventForUpdateDto, eevent);
             await _repository.SaveAsync();

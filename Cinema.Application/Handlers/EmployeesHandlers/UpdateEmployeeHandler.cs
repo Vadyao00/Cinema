@@ -25,6 +25,11 @@ namespace Cinema.Application.Handlers.EmployeesHandlers
             if (employee is null)
                 return new EmployeeNotFoundResponse(request.Id);
 
+            var events = await _repository.Event.GetEventsByIdsAsync(request.EmployeeForUpdateDto.EventsIds, trackChanges: false);
+            var showtimes = await _repository.Showtime.GetShowtimesByIdsAsync(request.EmployeeForUpdateDto.ShowtimesIds, trackChanges: false);
+            employee.Events = events.ToList();
+            employee.Showtimes = showtimes.ToList();
+
             _mapper.Map(request.EmployeeForUpdateDto, employee);
             await _repository.SaveAsync();
 

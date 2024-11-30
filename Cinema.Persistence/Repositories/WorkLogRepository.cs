@@ -50,5 +50,10 @@ namespace Cinema.Persistence.Repositories
             await FindByCondition(w => w.WorkLogId.Equals(id) && w.EmployeeId.Equals(employeeId), trackChanges)
                   .Include(w => w.Employee)
                   .SingleOrDefaultAsync();
+
+        public async Task<WorkLog> GetWorkLogAsync(Guid id, bool trackChanges) =>
+            await FindByCondition(w => w.WorkLogId.Equals(id), trackChanges)
+                  .Include(w => w.Employee)
+                  .SingleOrDefaultAsync();
     }
 }

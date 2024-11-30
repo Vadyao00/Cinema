@@ -2,6 +2,7 @@
 using Cinema.Application.Commands.ActorsCommands;
 using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
+using Cinema.Domain.Responses;
 using Contracts.IRepositories;
 using MediatR;
 

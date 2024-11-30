@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cinema.Application.Commands.EmployeesCommands;
+using Cinema.Application.Commands.EventsCommands;
 using Cinema.Domain.Entities;
 using Cinema.Domain.Responses;
 using Contracts.IRepositories;
@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Cinema.Application.Handlers.EventsHandlers
 {
-    public sealed class DeleteEventHandler : IRequestHandler<DeleteEmployeeCommand, ApiBaseResponse>
+    public sealed class DeleteEventHandler : IRequestHandler<DeleteEventCommand, ApiBaseResponse>
     {
         private readonly IRepositoryManager _repository;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace Cinema.Application.Handlers.EventsHandlers
             _mapper = mapper;
         }
 
-        public async Task<ApiBaseResponse> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<ApiBaseResponse> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
             var eevent = await _repository.Event.GetEventAsync(request.Id, request.TrackChanges);
             if (eevent is null)

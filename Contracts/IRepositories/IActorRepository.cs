@@ -9,5 +9,7 @@ namespace Contracts.IRepositories
         Task<Actor> GetActorAsync(Guid id, bool trackChanges);
         void CreateActor(Actor actor);
         void DeleteActor(Actor actor);
+        void UpdateActor(Actor actor);
+        Task<IEnumerable<Actor>> GetActorsByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

@@ -12,7 +12,7 @@ using System.Text.Json;
 namespace Cinema.Controllers.Controllers
 {
     [ApiController]
-    [Route("api/seats/{seatId}/tickets")]
+    [Route("api/tickets")]
     [Authorize]
     public class TicketsControllers : ApiControllerBase
     {
@@ -21,9 +21,9 @@ namespace Cinema.Controllers.Controllers
         public TicketsControllers(ISender sender) => _sender = sender;
 
         [HttpGet]
-        public async Task<IActionResult> GetTicketsForSeat([FromQuery]TicketParameters ticketParameters, Guid seatId)
+        public async Task<IActionResult> GetTickets([FromQuery]TicketParameters ticketParameters)
         {
-            var baseResult = await _sender.Send(new GetTicketsQuery(ticketParameters, seatId, TrackChanges: false));
+            var baseResult = await _sender.Send(new GetTicketsQuery(ticketParameters, TrackChanges: false));
             if(!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -35,9 +35,9 @@ namespace Cinema.Controllers.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "GetTicketById")]
-        public async Task<IActionResult> GetTicketForSeat(Guid seatId, Guid id)
+        public async Task<IActionResult> GetTicket(Guid id)
         {
-            var baseResult = await _sender.Send(new GetTicketQuery(seatId, id , TrackChanges: false));
+            var baseResult = await _sender.Send(new GetTicketQuery(id , TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -46,7 +46,7 @@ namespace Cinema.Controllers.Controllers
             return Ok(ticket);
         }
 
-        [HttpPost]
+        [HttpPost("{seatId}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateTicketForSeat(Guid seatId, [FromBody] TicketForCreationDto ticket)
@@ -57,14 +57,14 @@ namespace Cinema.Controllers.Controllers
 
             var createdTicket = baseResult.GetResult<TicketDto>();
 
-            return CreatedAtRoute("GetTicketById", new { seatId = seatId, id = createdTicket.TicketId }, createdTicket);
+            return CreatedAtRoute("GetTicketById", new { id = createdTicket.TicketId }, createdTicket);
         }
 
         [HttpDelete("{id:guid}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteTicket(Guid seatId, Guid id)
+        public async Task<IActionResult> DeleteTicket(Guid id)
         {
-            var baseResult = await _sender.Send(new DeleteTicketCommand(seatId, id ,TrackChanges: false));
+            var baseResult = await _sender.Send(new DeleteTicketCommand(id ,TrackChanges: false));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 
@@ -74,9 +74,9 @@ namespace Cinema.Controllers.Controllers
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> UpdateTicket(Guid seatId, Guid id, [FromBody] TicketForUpdateDto ticket)
+        public async Task<IActionResult> UpdateTicket(Guid id, [FromBody] TicketForUpdateDto ticket)
         {
-            var baseResult = await _sender.Send(new UpdateTicketCommand(seatId, id, ticket, SeatTrackChanges: false, TickTrackChanges: true));
+            var baseResult = await _sender.Send(new UpdateTicketCommand(id, ticket, SeatTrackChanges: false, TickTrackChanges: true));
             if (!baseResult.Suссess)
                 return ProccessError(baseResult);
 

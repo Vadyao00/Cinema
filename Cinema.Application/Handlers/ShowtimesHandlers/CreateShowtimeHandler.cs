@@ -29,11 +29,7 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
             _repository.Showtime.CreateShowtimeForMovie(request.MovieId, showtimeDb);
             await _repository.SaveAsync();
 
-            var movieDb = await _repository.Movie.GetMovieAsync(request.MovieId, request.TrackChanges);
-            if (movieDb is null)
-                return new MovieNotFoundResponse(request.MovieId);
-
-            showtimeDb.Movie = movieDb;
+            showtimeDb.Movie = movie;
 
             var showtimeToReturn = _mapper.Map<ShowtimeDto>(showtimeDb);
             return new ApiOkResponse<ShowtimeDto>(showtimeToReturn);

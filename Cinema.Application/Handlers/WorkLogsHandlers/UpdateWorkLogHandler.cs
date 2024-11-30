@@ -20,11 +20,7 @@ namespace Cinema.Application.Handlers.WorkLogsHandlers
 
         public async Task<ApiBaseResponse> Handle(UpdateWorkLogCommand request, CancellationToken cancellationToken)
         {
-            var employee = await _repository.Employee.GetEmployeeAsync(request.EmployeeId, request.EmpTrackChanges);
-            if (employee is null)
-                return new EmployeeNotFoundResponse(request.EmployeeId);
-
-            var workLogEntity = await _repository.WorkLog.GetWorkLogForEmployeeAsync(request.EmployeeId, request.Id, request.WrkTrackChanges);
+            var workLogEntity = await _repository.WorkLog.GetWorkLogAsync(request.Id, request.WrkTrackChanges);
             if (workLogEntity is null)
                 return new WorkLogNotFoundResponse(request.Id);
 

@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Cinema.Application.Commands.TicketsCommands
 {
-    public sealed record UpdateTicketCommand(Guid SeatId, Guid Id, TicketForUpdateDto TicketForUpdate, bool SeatTrackChanges, bool TickTrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record UpdateTicketCommand(Guid Id, TicketForUpdateDto TicketForUpdate, bool SeatTrackChanges, bool TickTrackChanges) : IRequest<ApiBaseResponse>;
 }

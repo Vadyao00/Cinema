@@ -17,6 +17,7 @@ namespace Cinema.Persistence.Repositories
             var events = await FindAll(trackChanges)
                   .FilterEvents(eventParameters.MinTicketPrice, eventParameters.MaxTicketPrice, eventParameters.StartTime, eventParameters.EndTime)
                   .Search(eventParameters.searchName)
+                  .Include(s => s.Employees)
                   .Sort(eventParameters.OrderBy)
                   .Skip((eventParameters.PageNumber - 1) * eventParameters.PageSize)
                   .Take(eventParameters.PageSize)
@@ -30,6 +31,11 @@ namespace Cinema.Persistence.Repositories
 
         public async Task<Event> GetEventAsync(Guid id, bool trackChanges) =>
             await FindByCondition(e => e.EventId.Equals(id), trackChanges)
+                  .Include(s => s.Employees)
                   .SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<Event>> GetEventsByIdsAsync(Guid[] ids, bool trackChanges) =>
+            await FindByCondition(m => ids.Contains(m.EventId), trackChanges)
+                  .ToListAsync();
     }
 }

@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Cinema.Application.Queries.ShowtimesQueries
 {
-    public sealed record GetShowtimesQuery(ShowtimeParameters ShowtimeParameters, Guid GenreId, Guid MovieId, bool TrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record GetShowtimesQuery(ShowtimeParameters ShowtimeParameters, bool TrackChanges) : IRequest<ApiBaseResponse>;
 }

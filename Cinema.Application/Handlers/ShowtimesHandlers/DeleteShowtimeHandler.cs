@@ -20,18 +20,14 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
 
         public async Task<ApiBaseResponse> Handle(DeleteShowtimeCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.TrackChanges);
-            if (movie is null)
-                return new MovieNotFoundResponse(request.MovieId);
-
-            var showtimeForMovie = await _repository.Showtime.GetShowtimeForMovieAsync(request.MovieId, request.Id, request.TrackChanges);
-            if (showtimeForMovie is null)
+            var showtime = await _repository.Showtime.GetShowtimeAsync(request.Id, request.TrackChanges);
+            if (showtime is null)
                 return new ShowtimeNotFoundResponse(request.Id);
 
-            _repository.Showtime.DeleteShowtimeForMovie(showtimeForMovie);
+            _repository.Showtime.DeleteShowtimeForMovie(showtime);
             await _repository.SaveAsync();
 
-            return new ApiOkResponse<Showtime>(showtimeForMovie);
+            return new ApiOkResponse<Showtime>(showtime);
         }
     }
 }

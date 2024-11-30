@@ -20,13 +20,12 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
 
         public async Task<ApiBaseResponse> Handle(UpdateShowtimeCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _repository.Movie.GetMovieAsync(request.MovieId, request.MovTrackChanges);
-            if (movie is null)
-                return new MovieNotFoundResponse(request.MovieId);
-
-            var showtimeEntity = await _repository.Showtime.GetShowtimeForMovieAsync(request.MovieId, request.Id, request.ShwTrackChanges);
+            var showtimeEntity = await _repository.Showtime.GetShowtimeAsync(request.Id, request.ShwTrackChanges);
             if (showtimeEntity is null)
                 return new ShowtimeNotFoundResponse(request.Id);
+
+            var employees = await _repository.Employee.GetEmployeesByIdsAsync(request.ShowtimeForUpdate.EmployeesIds, trackChanges: false);
+            showtimeEntity.Employees = employees.ToList();
 
             _mapper.Map(request.ShowtimeForUpdate, showtimeEntity);
             await _repository.SaveAsync();

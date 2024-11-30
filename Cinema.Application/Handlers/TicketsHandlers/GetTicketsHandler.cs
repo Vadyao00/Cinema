@@ -24,11 +24,7 @@ namespace Cinema.Application.Handlers.TicketsHandlers
             if (!request.TicketParameters.ValidSeatNumber)
                 return new SeatNumberBadRequestResponse();
 
-            var seat = await _repository.Seat.GetSeatAsync(request.SeatId, request.TrackChanges);
-            if (seat is null)
-                return new SeatNotFoundResponse(request.SeatId);
-
-            var ticketsWithMetaData = await _repository.Ticket.GetAllTicketsForSeatAsync(request.TicketParameters, request.SeatId, request.TrackChanges);
+            var ticketsWithMetaData = await _repository.Ticket.GetAllTicketsAsync(request.TicketParameters, request.TrackChanges);
             var ticketsDto = _mapper.Map<IEnumerable<TicketDto>>(ticketsWithMetaData);
 
             return new ApiOkResponse<(IEnumerable<TicketDto>, MetaData)>((ticketsDto, ticketsWithMetaData.MetaData));

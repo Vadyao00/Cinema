@@ -40,6 +40,7 @@ namespace Cinema.Persistence.Repositories
         public async Task<Showtime> GetShowtimeAsync(Guid id, bool trackChanges) =>
             await FindByCondition(s => s.ShowtimeId.Equals(id), trackChanges)
                   .Include(s => s.Movie)
+                  .Include(s => s.Employees)
                   .SingleOrDefaultAsync();
 
         public async Task<PagedList<Showtime>> GetAllShowtimesAsync(ShowtimeParameters showtimeParameters, bool trackChanges)
@@ -48,6 +49,7 @@ namespace Cinema.Persistence.Repositories
                   .FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
                   .Search(showtimeParameters.searchTitle)
                   .Include(s => s.Movie)
+                  .Include(s => s.Employees)
                   .Sort(showtimeParameters.OrderBy)
                   .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)
                   .Take(showtimeParameters.PageSize)
@@ -58,5 +60,9 @@ namespace Cinema.Persistence.Repositories
 
             return new PagedList<Showtime>(showtimes, count, showtimeParameters.PageNumber, showtimeParameters.PageSize);
         }
+
+        public async Task<IEnumerable<Showtime>> GetShowtimesByIdsAsync(Guid[] ids, bool trackChanges) =>
+            await FindByCondition(m => ids.Contains(m.ShowtimeId), trackChanges)
+                  .ToListAsync();
     }
 }

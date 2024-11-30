@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Cinema.Controllers.Filters;
 using NLog;
 using Cinema.LoggerService;
+using Cinema.API.Converters;
+using System.Text.Json.Serialization;
 
 namespace Cinema.API
 {
@@ -76,6 +78,12 @@ namespace Cinema.API
                 config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
                 config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
             }).AddXmlDataContractSerializerFormatters()
+              .AddJsonOptions(options =>
+              {
+                  options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                  options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                  options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+              })
               .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
             services.AddMediatR(cfg =>

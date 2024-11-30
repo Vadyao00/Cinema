@@ -9,5 +9,6 @@ namespace Contracts.IRepositories
         Task<Employee> GetEmployeeAsync(Guid id, bool trackChanges);
         void CreateEmployee(Employee employee);
         void DeleteEmployee(Employee employee);
+        Task<IEnumerable<Employee>> GetEmployeesByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

@@ -30,7 +30,6 @@ namespace Cinema.Application.Handlers.MoviesHandlers
             _repository.Movie.CreateMovieForGenre(request.GenreId, movieDb);
             await _repository.SaveAsync();
 
-            genre = await _repository.Genre.GetGenreAsync(request.GenreId, false);
             movieDb.Genre = genre;
 
             var movieToReturn = _mapper.Map<MovieDto>(movieDb);

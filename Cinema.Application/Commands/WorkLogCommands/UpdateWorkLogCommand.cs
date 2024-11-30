@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Cinema.Application.Commands.WorkLogCommands
 {
-    public sealed record UpdateWorkLogCommand(Guid EmployeeId, Guid Id, WorkLogForUpdateDto WorkLogForUpdate, bool EmpTrackChanges, bool WrkTrackChanges) : IRequest<ApiBaseResponse>;
+    public sealed record UpdateWorkLogCommand(Guid Id, WorkLogForUpdateDto WorkLogForUpdate, bool EmpTrackChanges, bool WrkTrackChanges) : IRequest<ApiBaseResponse>;
 }

@@ -1,4 +1,10 @@
-﻿namespace Cinema.Domain.DataTransferObjects
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Cinema.Domain.DataTransferObjects
 {
-    public record EventForUpdateDto : EventForManipulationDto;
+    public record EventForUpdateDto : EventForManipulationDto
+    {
+        [Required(ErrorMessage = "Employees is a required field.")]
+        public Guid[]? EmployeesIds { get; init; }
+    }
 }

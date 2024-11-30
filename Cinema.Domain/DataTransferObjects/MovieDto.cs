@@ -16,5 +16,6 @@
 
         public string? Description { get; init; }
         public string? GenreName { get; init; }
+        public string? Actors { get; init; }
     }
 }

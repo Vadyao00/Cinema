@@ -1,27 +1,17 @@
-﻿using Cinema.Controllers.Extensions;
-using Cinema.Controllers.Filters;
-using Cinema.Domain.DataTransferObjects;
+﻿using Cinema.Domain.DataTransferObjects;
 using Cinema.Domain.Entities;
-using Contracts.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.Controllers.Controllers
 {
     public class UserController : ApiControllerBase
     {
-        private readonly IServiceManager _service;
         private readonly UserManager<User> _userManager;
-        readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IServiceManager serviceManager)
+        public UserController(UserManager<User> userManager)
         {
-                _roleManager = roleManager;
                 _userManager = userManager;
-                _service = serviceManager;
         }
 
         [HttpGet]
@@ -106,45 +96,5 @@ namespace Cinema.Controllers.Controllers
             }
             return Ok();
         }
-
-        [HttpPost("ChangePassword")]
-        [Authorize]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var userId = User.FindFirst("sub")?.Value;
-            if (userId == null)
-            {
-                return Unauthorized("Не удалось определить пользователя.");
-            }
-
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound("Пользователь не найден.");
-            }
-
-            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors.Select(e => e.Description));
-            }
-
-            return Ok(new { Message = "Пароль успешно изменён." });
-        }
-    }
-
-    public class ChangePasswordRequest
-    {
-        [Required]
-        public string? OldPassword { get; set; }
-
-        [Required]
-        [MinLength(6)]
-        public string? NewPassword { get; set; }
     }
 }

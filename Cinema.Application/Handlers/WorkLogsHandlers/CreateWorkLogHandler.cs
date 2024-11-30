@@ -29,10 +29,7 @@ namespace Cinema.Application.Handlers.WorkLogsHandlers
             _repository.WorkLog.CreateWorkLogForEmployee(request.EmployeeId, workLogDb);
             await _repository.SaveAsync();
 
-            var employee = await _repository.Employee.GetEmployeeAsync(request.EmployeeId, request.TrackChanges);
-            if (employee is null)
-                return new EmployeeNotFoundResponse(request.EmployeeId);
-            workLogDb.Employee = employee;
+            workLogDb.Employee = employeee;
 
             var workLogToReturn = _mapper.Map<WorkLogDto>(workLogDb);
             return new ApiOkResponse<WorkLogDto>(workLogToReturn);

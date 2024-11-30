@@ -32,6 +32,7 @@ namespace Cinema.API.Extensions
                 {
                     b.EnableRetryOnFailure();
                 })
+                .EnableSensitiveDataLogging()
             );
 
         public static void ConfigureLoggerService(this IServiceCollection services) =>

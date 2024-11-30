@@ -13,5 +13,6 @@
         public TimeOnly EndTime { get; init; }
 
         public decimal TicketPrice { get; init; }
+        public string? Employees { get; init; }
     }
 }

@@ -22,6 +22,7 @@ namespace Cinema.Persistence.Repositories
                   .FilterMovies(movieParameters.MinAgeRestriction, movieParameters.MaxAgeRestriction)
                   .Search(movieParameters.searchTitle)
                   .Include(m => m.Genre)
+                  .Include(a => a.Actors)
                   .Sort(movieParameters.OrderBy)
                   .Skip((movieParameters.PageNumber - 1) * movieParameters.PageSize)
                   .Take(movieParameters.PageSize)
@@ -52,6 +53,16 @@ namespace Cinema.Persistence.Repositories
         public async Task<Movie> GetMovieAsync(Guid id, bool trackChanges) =>
             await FindByCondition(m => m.MovieId.Equals(id), trackChanges)
                   .Include(m => m.Genre)
+                  .Include(m => m.Actors)
                   .SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<Movie>> GetMoviesByIdsAsync(Guid[] ids, bool trackChanges) =>
+            await FindByCondition(m => ids.Contains(m.MovieId), trackChanges)
+                  .ToListAsync();
+
+        public void DetachEntity(Movie movie)
+        {
+            dbContext.Entry(movie).State = EntityState.Detached;
+        }
     }
 }

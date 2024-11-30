@@ -23,12 +23,13 @@ namespace Cinema.Application.Handlers.TicketsHandlers
         {
             var ticketDb = _mapper.Map<Ticket>(request.Ticket);
 
-            _repository.Ticket.CreateTicketForSeat(request.SeatId, ticketDb);
-            await _repository.SaveAsync();
-
             var seat = await _repository.Seat.GetSeatAsync(request.SeatId, request.TrackChanges);
             if (seat is null)
                 return new SeatNotFoundResponse(request.SeatId);
+
+            _repository.Ticket.CreateTicketForSeat(request.SeatId, ticketDb);
+            await _repository.SaveAsync();
+
             ticketDb.Seat = seat;
 
             var ticketToReturn = _mapper.Map<TicketDto>(ticketDb);
