@@ -20,7 +20,9 @@ namespace Cinema.Persistence.Repositories
         {
             var showtimes = await FindByCondition(s => s.MovieId.Equals(movieId), trackChanges)
                   .FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
-                  .Search(showtimeParameters.searchTitle)
+                  .SearchTitle(showtimeParameters.searchTitle)
+                  .SearchTicketPrice(showtimeParameters.searchTicketPrice)
+                  .SearchMonth(showtimeParameters.searchMonth)
                   .Include(s => s.Movie)
                   .Sort(showtimeParameters.OrderBy)
                   .Skip((showtimeParameters.PageNumber - 1) * showtimeParameters.PageSize)
@@ -47,7 +49,9 @@ namespace Cinema.Persistence.Repositories
         {
             var showtimes = await FindAll(trackChanges)
                   .FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
-                  .Search(showtimeParameters.searchTitle)
+                  .SearchTitle(showtimeParameters.searchTitle)
+                  .SearchTicketPrice(showtimeParameters.searchTicketPrice)
+                  .SearchMonth(showtimeParameters.searchMonth)
                   .Include(s => s.Movie)
                   .Include(s => s.Employees)
                   .Sort(showtimeParameters.OrderBy)
@@ -56,9 +60,20 @@ namespace Cinema.Persistence.Repositories
                   .ToListAsync();
 
             var count = await FindAll(trackChanges).FilterShowtimes(showtimeParameters.MinTicketPrice, showtimeParameters.MaxTicketPrice, showtimeParameters.StartTime, showtimeParameters.EndTime)
-                  .Search(showtimeParameters.searchTitle).CountAsync();
+                  .SearchTitle(showtimeParameters.searchTitle)
+                  .SearchTicketPrice(showtimeParameters.searchTicketPrice)
+                  .SearchMonth(showtimeParameters.searchMonth).CountAsync();
 
             return new PagedList<Showtime>(showtimes, count, showtimeParameters.PageNumber, showtimeParameters.PageSize);
+        }
+
+        public async Task<IEnumerable<Showtime>> GetAllShowtimesWithoutMetaAsync(bool trackChanges)
+        {
+            var showtimes = await FindAll(trackChanges)
+                  .Include(s => s.Movie)
+                  .ToListAsync();
+
+            return showtimes;
         }
 
         public async Task<IEnumerable<Showtime>> GetShowtimesByIdsAsync(Guid[] ids, bool trackChanges) =>

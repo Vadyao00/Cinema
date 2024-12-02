@@ -7,6 +7,7 @@ namespace Contracts.IRepositories
     {
         Task<PagedList<Seat>> GetAllSeatsAsync(SeatParameters seatParameters, bool trackChanges);
         Task<Seat> GetSeatAsync(Guid id, bool trackChanges);
+        Task<IEnumerable<Seat>> GetAllSeatsWithoutMetaAsync(bool trackChanges);
         void CreateSeat(Guid? eventId, Guid? showtimeId, Seat seat);
         void DeleteSeat(Seat seat);
     }

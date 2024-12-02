@@ -12,5 +12,7 @@
         public bool ValidTimeRange => EndTime > StartTime;
 
         public string? searchTitle { get; set; }
+        public string? searchTicketPrice { get; set; }
+        public string? searchMonth { get; set; }
     }
 }

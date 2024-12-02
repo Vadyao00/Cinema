@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(employees);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllEmployees()
+        {
+            var baseResult = await _sender.Send(new GetAllEmployeesQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var employees = baseResult.GetResult<IEnumerable<EmployeeDto>>();
+
+            return Ok(employees);
+        }
+
         [HttpGet("{id:guid}", Name = "EmployeeById")]
         public async Task<IActionResult> GetEmployee(Guid id)
         {

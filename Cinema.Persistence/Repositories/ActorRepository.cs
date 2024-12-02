@@ -32,6 +32,14 @@ namespace Cinema.Persistence.Repositories
             return new PagedList<Actor>(actors, count, actorParameters.PageNumber, actorParameters.PageSize);
         }
 
+        public async Task<IEnumerable<Actor>> GetAllActorsWithoutMetaAsync(bool trackChanges)
+        {
+            var actors = await FindAll(trackChanges)
+                  .ToListAsync();
+
+            return actors;
+        }
+
         public void UpdateActor(Actor actor) => Update(actor);
 
         public async Task<IEnumerable<Actor>> GetActorsByIdsAsync(Guid[] ids, bool trackChanges) =>

@@ -6,7 +6,7 @@ namespace Cinema.Persistence.Extensions
 {
     public static class RepositoryWorkLogExtensions
     {
-        public static IQueryable<WorkLog> Search(this IQueryable<WorkLog> workLogs, string searchName)
+        public static IQueryable<WorkLog> SearchEmployeeName(this IQueryable<WorkLog> workLogs, string searchName)
         {
             if (string.IsNullOrWhiteSpace(searchName))
                 return workLogs;
@@ -14,6 +14,22 @@ namespace Cinema.Persistence.Extensions
             var lowerCaseName = searchName.Trim().ToLower();
 
             return workLogs.Where(a => a.Employee.Name.ToLower().Contains(lowerCaseName));
+        }
+
+        public static IQueryable<WorkLog> SearchWorkExp(this IQueryable<WorkLog> workLogs, string searchWorkExp)
+        {
+            if (string.IsNullOrWhiteSpace(searchWorkExp))
+                return workLogs;
+
+            var lowerCaseName = searchWorkExp.Trim().ToLower();
+
+            int workExp;
+            if(!int.TryParse(searchWorkExp, out workExp))
+            {
+                workExp = -1;
+            }
+
+            return workLogs.Where(a => a.WorkExperience == workExp);
         }
 
         public static IQueryable<WorkLog> Sort(this IQueryable<WorkLog> workLogs, string orderByQueryString)

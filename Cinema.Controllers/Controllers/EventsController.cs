@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(events);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllEvents()
+        {
+            var baseResult = await _sender.Send(new GetAllEventsQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var events = baseResult.GetResult<IEnumerable<EventDto>>();
+
+            return Ok(events);
+        }
+
         [HttpGet("{id:guid}", Name = "EventById")]
         public async Task<IActionResult> GetEvent(Guid id)
         {

@@ -8,6 +8,9 @@
         public TimeOnly StartTime {  get; set; } = new TimeOnly(0,0,0);
         public TimeOnly EndTime {  get; set; } = new TimeOnly(23,59,59);
 
+        public DateOnly StartDate { get; set; } = new DateOnly(1, 1, 1);
+        public DateOnly EndDate { get; set; } = new DateOnly(2030, 1, 1);
+
         public bool ValidTicketPriceRange => MaxTicketPrice > MinTicketPrice;
         public bool ValidTimeRange => EndTime > StartTime;
 

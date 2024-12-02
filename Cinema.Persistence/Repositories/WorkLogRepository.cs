@@ -19,14 +19,16 @@ namespace Cinema.Persistence.Repositories
         public async Task<PagedList<WorkLog>> GetAllWorkLogsAsync(WorkLogParameters workLogParameters, bool trackChanges)
         {
             var workLogs = await FindAll(trackChanges)
-                  .Search(workLogParameters.searchName)
+                  .SearchEmployeeName(workLogParameters.searchName)
+                  .SearchWorkExp(workLogParameters.searchWorkExperience)
                   .Include(w => w.Employee)
                   .Sort(workLogParameters.OrderBy)
                   .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)
                   .Take(workLogParameters.PageSize)
                   .ToListAsync();
 
-            var count = await FindAll(trackChanges).Search(workLogParameters.searchName).CountAsync();
+            var count = await FindAll(trackChanges).SearchEmployeeName(workLogParameters.searchName)
+                  .SearchWorkExp(workLogParameters.searchWorkExperience).CountAsync();
 
             return new PagedList<WorkLog>(workLogs, count, workLogParameters.PageNumber, workLogParameters.PageSize);
         }
@@ -34,7 +36,8 @@ namespace Cinema.Persistence.Repositories
         public async Task<PagedList<WorkLog>> GetAllWorkLogsForEmployeeAsync(WorkLogParameters workLogParameters, Guid employeeId, bool trackChanges)
         {
             var workLogs = await FindByCondition(w => w.EmployeeId.Equals(employeeId), trackChanges)
-                  .Search(workLogParameters.searchName)
+                  .SearchEmployeeName(workLogParameters.searchName)
+                  .SearchWorkExp(workLogParameters.searchWorkExperience)
                   .Include(w => w.Employee)
                   .Sort(workLogParameters.OrderBy)
                   .Skip((workLogParameters.PageNumber - 1) * workLogParameters.PageSize)

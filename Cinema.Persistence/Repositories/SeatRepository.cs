@@ -37,6 +37,14 @@ namespace Cinema.Persistence.Repositories
             return new PagedList<Seat>(seats, count, seatParameters.PageNumber, seatParameters.PageSize);
         }
 
+        public async Task<IEnumerable<Seat>> GetAllSeatsWithoutMetaAsync(bool trackChanges)
+        {
+            var seats = await FindAll(trackChanges)
+                  .ToListAsync();
+
+            return seats;
+        }
+
         public async Task<Seat> GetSeatAsync(Guid id, bool trackChanges) =>
             await FindByCondition(s => s.SeatId.Equals(id), trackChanges)
                   .Include(s => s.Event)

@@ -26,6 +26,14 @@ namespace Cinema.Persistence.Repositories
             return new PagedList<Genre>(genres, count, genreParameters.PageNumber, genreParameters.PageSize);
         }
 
+        public async Task<IEnumerable<Genre>> GetAllGenresWithoutMetaAsync(bool trackChanges)
+        {
+            var genres = await FindAll(trackChanges)
+                  .ToListAsync();
+
+            return genres;
+        }
+
         public async Task<Genre> GetGenreAsync(Guid id, bool trackChanges) =>
             await FindByCondition(g => g.GenreId.Equals(id), trackChanges)
                   .SingleOrDefaultAsync();

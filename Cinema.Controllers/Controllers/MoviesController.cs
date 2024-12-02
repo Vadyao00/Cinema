@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(movies);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllMovies()
+        {
+            var baseResult = await _sender.Send(new GetAllMoviesQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var movies = baseResult.GetResult<IEnumerable<MovieDto>>();
+
+            return Ok(movies);
+        }
+
         [HttpGet("{id:guid}", Name = "GetMovieById")]
         public async Task<IActionResult> GetMovie(Guid id)
         {

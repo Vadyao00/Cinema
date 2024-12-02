@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(seats);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllSeats()
+        {
+            var baseResult = await _sender.Send(new GetAllSeatsQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var seats = baseResult.GetResult<IEnumerable<SeatDto>>();
+
+            return Ok(seats);
+        }
+
         [HttpGet("{id:guid}", Name = "GetSeatById")]
         public async Task<IActionResult> GetSeat(Guid id)
         {

@@ -9,5 +9,6 @@
         public bool ValidAgeRestriction => MaxAgeRestriction > MinAgeRestriction;
 
         public string? searchTitle { get; set; }
+        public string? searchProductionCompany { get; set; }
     }
 }

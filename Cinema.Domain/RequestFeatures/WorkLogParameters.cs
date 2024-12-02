@@ -5,5 +5,6 @@
         public WorkLogParameters() => OrderBy = "StartDate";
 
         public string? searchName { get; set; }
+        public string? searchWorkExperience { get; set; }
     }
 }

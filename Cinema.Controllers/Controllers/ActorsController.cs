@@ -32,8 +32,17 @@ namespace Cinema.Controllers.Controllers
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
-            ViewBag.ActorParameters = actorParameters;
-            ViewBag.MetaData = metaData;
+            return Ok(actors);
+        }
+
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllActors([FromQuery] ActorParameters actorParameters)
+        {
+            var baseResult = await _sender.Send(new GetAllActorsQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var actors = baseResult.GetResult<IEnumerable<ActorDto>>();
 
             return Ok(actors);
         }

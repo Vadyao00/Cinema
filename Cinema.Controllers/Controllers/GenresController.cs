@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(genres);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllGenres()
+        {
+            var baseResult = await _sender.Send(new GetAllGenresQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var genres = baseResult.GetResult<IEnumerable<GenreDto>>();
+
+            return Ok(genres);
+        }
+
         [HttpGet("{id:guid}", Name = "GenreById")]
         public async Task<IActionResult> GetGenre(Guid id)
         {

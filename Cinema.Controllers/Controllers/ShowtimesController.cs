@@ -34,6 +34,18 @@ namespace Cinema.Controllers.Controllers
             return Ok(showtimes);
         }
 
+        [HttpGet("withoutmeta")]
+        public async Task<IActionResult> GetAllShowtimes()
+        {
+            var baseResult = await _sender.Send(new GetAllShowtimesQuery(TrackChanges: false));
+            if (!baseResult.Suссess)
+                return ProccessError(baseResult);
+
+            var showtimes = baseResult.GetResult<IEnumerable<ShowtimeDto>>();
+
+            return Ok(showtimes);
+        }
+
         [HttpGet("{id:guid}", Name = "GetShowtimeById")]
         public async Task<IActionResult> GetShowtimeForMovie(Guid id)
         {

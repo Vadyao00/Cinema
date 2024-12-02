@@ -6,8 +6,8 @@ namespace Cinema.Persistence.Extensions
 {
     public static class RepositoryEventExtensions
     {
-        public static IQueryable<Event> FilterEvents(this IQueryable<Event> events, decimal MinTicketPrice, decimal MaxTicketPrice, TimeOnly StartTime, TimeOnly EndTime)
-            => events.Where(e => (e.TicketPrice >= MinTicketPrice && e.TicketPrice <= MaxTicketPrice && e.StartTime >= StartTime && e.EndTime <= EndTime));
+        public static IQueryable<Event> FilterEvents(this IQueryable<Event> events, decimal MinTicketPrice, decimal MaxTicketPrice, TimeOnly StartTime, TimeOnly EndTime, DateOnly StartDate, DateOnly EndDate)
+            => events.Where(e => (e.TicketPrice >= MinTicketPrice && e.TicketPrice <= MaxTicketPrice && e.StartTime >= StartTime && e.EndTime <= EndTime && e.Date >= StartDate && e.Date <= EndDate));
 
         public static IQueryable<Event> Search(this IQueryable<Event> events, string searchName)
         {
