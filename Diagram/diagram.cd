@@ -1,0 +1,683 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Cinema.Controllers.Filters.ValidationFilterAttribute" Collapsed="true">
+    <Position X="10.75" Y="4" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.ActorsController" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.ApiControllerBase" Collapsed="true">
+    <Position X="12.75" Y="4" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.AuthenticationController" Collapsed="true">
+    <Position X="14" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.EmployeesController" Collapsed="true">
+    <Position X="20.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.EventsController" Collapsed="true">
+    <Position X="7.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.GenresController" Collapsed="true">
+    <Position X="9.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.MoviesController" Collapsed="true">
+    <Position X="16.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.SeatsControllers" Collapsed="true">
+    <Position X="23" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.ShowtimesController" Collapsed="true">
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.TicketsControllers" Collapsed="true">
+    <Position X="11.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.TokenController" Collapsed="true">
+    <Position X="18.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.UserController" Collapsed="true">
+    <Position X="25.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Controllers.WorkLogsController" Collapsed="true">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Controllers.Extensions.ApiBaseResponseExtention" Collapsed="true">
+    <Position X="14.75" Y="4" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Extensions.ServiceExtensions" Collapsed="true">
+    <Position X="12.75" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Extensions.ExceptionMiddlewareExtensions" Collapsed="true">
+    <Position X="12.75" Y="23.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Program" Collapsed="true">
+    <Position X="9.25" Y="22.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.MappingProfile" Collapsed="true">
+    <Position X="11" Y="22.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Data.ApplicationDbContext" Collapsed="true">
+    <Position X="12.75" Y="22.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Converters.DateOnlyJsonConverter" Collapsed="true">
+    <Position X="9.25" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.API.Converters.TimeOnlyJsonConverter" Collapsed="true">
+    <Position X="9.25" Y="23.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.CreateActorHandler" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.DeleteActorHandler" Collapsed="true">
+    <Position X="2.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.GetActorHandler" Collapsed="true">
+    <Position X="4" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.GetActorsHandler" Collapsed="true">
+    <Position X="5.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.GetAllActorsHandler" Collapsed="true">
+    <Position X="7.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ActorsHandlers.UpdateActorHandler" Collapsed="true">
+    <Position X="5.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.CreateEmployeeHandler" Collapsed="true">
+    <Position X="2.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.DeleteEmployeeHandler" Collapsed="true">
+    <Position X="4" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.GetAllEmployeesHandler" Collapsed="true">
+    <Position X="9.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.GetEmployeeHandler" Collapsed="true">
+    <Position X="5.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.GetEmployeesHandler" Collapsed="true">
+    <Position X="7.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EmployeesHandlers.UpdateEmployeeHandler" Collapsed="true">
+    <Position X="7.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.CreateEventHandler" Collapsed="true">
+    <Position X="4" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.DeleteEventHandler" Collapsed="true">
+    <Position X="5.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.GetAllEventsHandler" Collapsed="true">
+    <Position X="11" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.GetEventHandler" Collapsed="true">
+    <Position X="9.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.GetEventsHandler" Collapsed="true">
+    <Position X="11" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.EventsHandlers.UpdateEventHandler" Collapsed="true">
+    <Position X="9.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.CreateGenreHandler" Collapsed="true">
+    <Position X="5.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.DeleteGenreHandler" Collapsed="true">
+    <Position X="7.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.GetAllGenresHandler" Collapsed="true">
+    <Position X="12.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.GetGenreHandler" Collapsed="true">
+    <Position X="12.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.GetGenresHandler" Collapsed="true">
+    <Position X="0.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.GenresHandlers.UpdateGenreHandler" Collapsed="true">
+    <Position X="11" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.CreateMovieHandler" Collapsed="true">
+    <Position X="7.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.DeleteMovieHandler" Collapsed="true">
+    <Position X="9.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.GetAllMoviesHandler" Collapsed="true">
+    <Position X="0.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.GetMovieHandler" Collapsed="true">
+    <Position X="2.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.GetMoviesHandler" Collapsed="true">
+    <Position X="4" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.MoviesHandlers.UpdateMovieHandler" Collapsed="true">
+    <Position X="12.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.CreateSeatHandler" Collapsed="true">
+    <Position X="9.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.DeleteSeatHandler" Collapsed="true">
+    <Position X="11" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.GetAllSeatsHandler" Collapsed="true">
+    <Position X="2.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.GetSeatHandler" Collapsed="true">
+    <Position X="5.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.GetSeatsHandler" Collapsed="true">
+    <Position X="7.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.SeatsHandlers.UpdateSeatHandler" Collapsed="true">
+    <Position X="0.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.CreateShowtimeHandler" Collapsed="true">
+    <Position X="11" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.DeleteShowtimeHandler" Collapsed="true">
+    <Position X="12.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.GetAllShowtimesHandler" Collapsed="true">
+    <Position X="4" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.GetShowtimeHandler" Collapsed="true">
+    <Position X="9.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.GetShowtimesHandler" Collapsed="true">
+    <Position X="11" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.ShowtimesHandlers.UpdateShowtimeHandler" Collapsed="true">
+    <Position X="2.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.TicketsHandlers.CreateTicketHandler" Collapsed="true">
+    <Position X="12.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.TicketsHandlers.DeleteTicketHandler" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.TicketsHandlers.GetTicketHandler" Collapsed="true">
+    <Position X="12.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.TicketsHandlers.GetTicketsHandler" Collapsed="true">
+    <Position X="0.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.TicketsHandlers.UpdateTicketHandler" Collapsed="true">
+    <Position X="4" Y="12.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.WorkLogsHandlers.CreateWorkLogHandler" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.WorkLogsHandlers.DeleteWorkLogHandler" Collapsed="true">
+    <Position X="2.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.WorkLogsHandlers.GetWorkLogHandler" Collapsed="true">
+    <Position X="2.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.WorkLogsHandlers.GetWorkLogsHandler" Collapsed="true">
+    <Position X="4" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Handlers.WorkLogsHandlers.UpdateWorkLogHandler" Collapsed="true">
+    <Position X="5.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Application.Services.ServiceManager" Collapsed="true">
+    <Position X="14.25" Y="13" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Domain.ConfigurationModels.JwtConfiguration" Collapsed="true">
+    <Position X="17.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.DataTransferObjects.UserForUpdateDto" Collapsed="true">
+    <Position X="15.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Actor" Collapsed="true">
+    <Position X="15.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Employee" Collapsed="true">
+    <Position X="17.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Event" Collapsed="true">
+    <Position X="22.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Genre" Collapsed="true">
+    <Position X="15.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Movie" Collapsed="true">
+    <Position X="20.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Seat" Collapsed="true">
+    <Position X="17.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Showtime" Collapsed="true">
+    <Position X="19" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.Ticket" Collapsed="true">
+    <Position X="20.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.User" Collapsed="true">
+    <Position X="22.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Entities.WorkLog" Collapsed="true">
+    <Position X="17.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.ErrorModels.ErrorDetails" Collapsed="true">
+    <Position X="19" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.ErrorModels.ErrorViewModel" Collapsed="true">
+    <Position X="20.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Exceptions.NotFoundException" Collapsed="true">
+    <Position X="22.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.ActorParameters" Collapsed="true">
+    <Position X="13.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.EmployeeParameters" Collapsed="true">
+    <Position X="16" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.EventParameters" Collapsed="true">
+    <Position X="20.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.GenreParameters" Collapsed="true">
+    <Position X="25" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.MetaData" Collapsed="true">
+    <Position X="19" Y="7.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.MovieParameters" Collapsed="true">
+    <Position X="31.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.PagedList&lt;T&gt;" Collapsed="true">
+    <Position X="15.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.RequestParameters" Collapsed="true">
+    <Position X="22.75" Y="19.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.SeatParameters" Collapsed="true">
+    <Position X="18.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.ShowtimeParameters" Collapsed="true">
+    <Position X="22.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.TicketParameters" Collapsed="true">
+    <Position X="27.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.RequestFeatures.WorkLogParameters" Collapsed="true">
+    <Position X="29.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ActorNotFoundResponse" Collapsed="true">
+    <Position X="32.25" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.AgeRestrictionBadRequestResponse" Collapsed="true">
+    <Position X="10" Y="15" Width="1.5" />
+    <InheritanceLine Type="Cinema.Domain.Responses.ApiBadRequestResponse" FixedToPoint="true">
+      <Path>
+        <Point X="12.75" Y="15.75" />
+        <Point X="12.75" Y="15.375" />
+        <Point X="11.5" Y="15.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ApiBadRequestResponse" Collapsed="true">
+    <Position X="12" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ApiBaseResponse" Collapsed="true">
+    <Position X="23.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ApiNotFoundResponse" Collapsed="true">
+    <Position X="27.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ApiOkResponse&lt;TResult&gt;" Collapsed="true">
+    <Position X="39" Y="15.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.EmployeeNotFoundResponse" Collapsed="true">
+    <Position X="30" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.EventNotFoundResponse" Collapsed="true">
+    <Position X="34.5" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.GenreNotFoundResponse" Collapsed="true">
+    <Position X="18.75" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.MaxTicketPriceBadRequestPesponse" Collapsed="true">
+    <Position X="9.75" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.MovieNotFoundResponse" Collapsed="true">
+    <Position X="23.25" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.RefreshTokenBadRequestResponse" Collapsed="true">
+    <Position X="14.25" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.SeatNotFoundResponse" Collapsed="true">
+    <Position X="27.75" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.SeatNumberBadRequestResponse" Collapsed="true">
+    <Position X="16.5" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.ShowtimeNotFoundResponse" Collapsed="true">
+    <Position X="36.75" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.TicketNotFoundResponse" Collapsed="true">
+    <Position X="21" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.TimeRangeBadRequestResponse" Collapsed="true">
+    <Position X="12" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Domain.Responses.WorkLogNotFoundResponse" Collapsed="true">
+    <Position X="25.5" Y="17.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.ActorConfiguration" Collapsed="true">
+    <Position X="0.5" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.EmployeeConfiguration" Collapsed="true">
+    <Position X="2.25" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.EventConfiguration" Collapsed="true">
+    <Position X="4" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.GenreConfiguration" Collapsed="true">
+    <Position X="5.75" Y="24.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.MovieConfiguration" Collapsed="true">
+    <Position X="0.5" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.RoleConfiguration" Collapsed="true">
+    <Position X="2.25" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.SeatConfiguration" Collapsed="true">
+    <Position X="4" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.ShowtimeConfiguration" Collapsed="true">
+    <Position X="5.75" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.TicketConfiguration" Collapsed="true">
+    <Position X="0.5" Y="26.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Configurations.WorkLogConfiguration" Collapsed="true">
+    <Position X="2.25" Y="26.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.Utility.OrderQueryBuilder" Collapsed="true">
+    <Position X="0.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryActorExtensions" Collapsed="true">
+    <Position X="2.25" Y="19.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryEmployeeExtensions" Collapsed="true">
+    <Position X="4" Y="19.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryEventExtensions" Collapsed="true">
+    <Position X="5.75" Y="19.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryGenreExtensions" Collapsed="true">
+    <Position X="0.5" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryMovieExtensions" Collapsed="true">
+    <Position X="2.25" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositorySeatExtensions" Collapsed="true">
+    <Position X="4" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryShowtimeExtensions" Collapsed="true">
+    <Position X="5.75" Y="20.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryTicketExtensions" Collapsed="true">
+    <Position X="0.5" Y="21.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Extensions.RepositoryWorkLogExtensions" Collapsed="true">
+    <Position X="2.25" Y="21.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.ActorRepository" Collapsed="true">
+    <Position X="16.5" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.EmployeeRepository" Collapsed="true">
+    <Position X="23.25" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.EventRepository" Collapsed="true">
+    <Position X="27.75" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.GenreRepository" Collapsed="true">
+    <Position X="32.25" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.MovieRepository" Collapsed="true">
+    <Position X="18.75" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.RepositoryBase&lt;T&gt;" Collapsed="true">
+    <Position X="25.5" Y="24.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.SeatRepository" Collapsed="true">
+    <Position X="30" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.ShowtimeRepository" Collapsed="true">
+    <Position X="34.5" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.TicketRepository" Collapsed="true">
+    <Position X="21" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.Repositories.WorkLogRepository" Collapsed="true">
+    <Position X="25.5" Y="25.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cinema.Persistence.CinemaContext" Collapsed="true">
+    <Position X="2.25" Y="15.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Cinema.Persistence.RepositoryManager" Collapsed="true">
+    <Position X="4" Y="15.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Contracts.IRepositories.IActorRepository" Collapsed="true">
+    <Position X="0.5" Y="16.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IEmployeeRepository" Collapsed="true">
+    <Position X="4" Y="16.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IEventRepository" Collapsed="true">
+    <Position X="5.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IGenreRepository" Collapsed="true">
+    <Position X="0.5" Y="17" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IMovieRepository" Collapsed="true">
+    <Position X="2.25" Y="17" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IRepositoryBase&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="17" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IRepositoryManager" Collapsed="true">
+    <Position X="5.75" Y="17" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.ISeatRepository" Collapsed="true">
+    <Position X="0.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IShowtimeRepository" Collapsed="true">
+    <Position X="4" Y="17.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.ITicketRepository" Collapsed="true">
+    <Position X="5.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IRepositories.IWorkLogRepository" Collapsed="true">
+    <Position X="0.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IServices.IAuthenticationService" Collapsed="true">
+    <Position X="2.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Contracts.IServices.IServiceManager" Collapsed="true">
+    <Position X="2.25" Y="17.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

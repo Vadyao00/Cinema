@@ -40,6 +40,9 @@ namespace Cinema.Persistence.Repositories
         public async Task<IEnumerable<Seat>> GetAllSeatsWithoutMetaAsync(bool trackChanges)
         {
             var seats = await FindAll(trackChanges)
+                  .Include(s => s.Event)
+                  .Include(s => s.Showtime)
+                  .Include(s => s.Showtime!.Movie)
                   .ToListAsync();
 
             return seats;

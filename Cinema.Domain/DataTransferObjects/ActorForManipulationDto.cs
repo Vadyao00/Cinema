@@ -6,5 +6,8 @@ namespace Cinema.Domain.DataTransferObjects
         [Required(ErrorMessage = "Actor name is a required field.")]
         [MaxLength(255, ErrorMessage = "Maximum length for the Name is 255 characters.")]
         public string? Name { get; init; }
+
+        [Required(ErrorMessage = "Movies is a required field.")]
+        public Guid[]? MoviesIds { get; init; }
     }
 }

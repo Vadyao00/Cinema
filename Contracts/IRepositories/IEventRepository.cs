@@ -10,6 +10,7 @@ namespace Contracts.IRepositories
         Task<IEnumerable<Event>> GetAllEventsWithoutMetaAsync(bool trackChanges);
         void CreateEvent(Event eevent);
         void DeleteEvent(Event eevent);
+        void Attach(Event eevent);
         Task<IEnumerable<Event>> GetEventsByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

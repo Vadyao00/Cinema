@@ -11,6 +11,7 @@ namespace Cinema.Persistence.Repositories
         public void Create(T entity) => DbContext.Set<T>().Add(entity);
 
         public void Delete(T entity) => DbContext.Set<T>().Remove(entity);
+        public void Attach(T entity) => DbContext.Set<T>().Attach(entity);
 
         public IQueryable<T> FindAll(bool trackChanges) =>
             !trackChanges ?

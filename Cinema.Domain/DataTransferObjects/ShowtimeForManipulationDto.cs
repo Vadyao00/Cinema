@@ -15,5 +15,8 @@ namespace Cinema.Domain.DataTransferObjects
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "TicketPrice is required and it can't be lower than 0")]
         public decimal TicketPrice { get; init; }
+
+        [Required(ErrorMessage = "Employees is a required field.")]
+        public Guid[]? EmployeesIds { get; init; }
     }
 }

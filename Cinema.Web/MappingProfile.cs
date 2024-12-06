@@ -25,8 +25,11 @@ namespace Cinema.API
             CreateMap<Showtime, ShowtimeDto>().ForMember(s => s.MovieTitle,
                 opt => opt.MapFrom(x => x.Movie.Title)).ForMember(e => e.Employees,
                 opt => opt.MapFrom(g => string.Join(", ", g.Employees.Select(m => m.Name)))); ;
-            CreateMap<Ticket, TicketDto>().ForMember(t => t.SeatNumber,
-                opt => opt.MapFrom(x => x.Seat.SeatNumber));
+            CreateMap<Ticket, TicketDto>()
+                .ForMember(t => t.SeatNumber, opt => opt.MapFrom(x => x.Seat.SeatNumber))
+                .ForMember(t => t.Name, opt => opt.MapFrom(x =>
+                    x.Seat.Event != null ? x.Seat.Event.Name :
+                    x.Seat.Showtime != null ? x.Seat.Showtime.Movie.Title : string.Empty));
             CreateMap<WorkLog, WorkLogDto>().ForMember(w => w.EmployeeName,
                 opt => opt.MapFrom(x => x.Employee.Name));
 

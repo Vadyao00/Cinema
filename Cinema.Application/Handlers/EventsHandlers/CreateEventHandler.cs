@@ -22,6 +22,17 @@ namespace Cinema.Application.Handlers.EventsHandlers
         {
             var eventEntity = _mapper.Map<Event>(request.EventDto);
 
+            eventEntity.Employees.Clear();
+
+            var employees = await _repository.Employee.GetEmployeesByIdsAsync(request.EventDto.EmployeesIds, false);
+
+            if (employees is not null)
+                foreach (var employee in employees)
+                {
+                    _repository.Employee.Attach(employee);
+                    eventEntity.Employees.Add(employee);
+                }
+
             _repository.Event.CreateEvent(eventEntity);
             await _repository.SaveAsync();
 

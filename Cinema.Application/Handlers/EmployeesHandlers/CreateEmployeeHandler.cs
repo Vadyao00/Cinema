@@ -22,6 +22,26 @@ namespace Cinema.Application.Handlers.EmployeesHandlers
         {
             var employeeEntity = _mapper.Map<Employee>(request.EmployeeDto);
 
+            employeeEntity.Events.Clear();
+            employeeEntity.Showtimes.Clear();
+
+            var events = await _repository.Event.GetEventsByIdsAsync(request.EmployeeDto.EventsIds, false);
+            var showtimes = await _repository.Showtime.GetShowtimesByIdsAsync(request.EmployeeDto.ShowtimesIds, false);
+
+            if (events is not null && showtimes is not null)
+            {
+                foreach (var even in events)
+                {
+                    _repository.Event.Attach(even);
+                    employeeEntity.Events.Add(even);
+                }
+                foreach (var showtime in showtimes)
+                {
+                    _repository.Showtime.Attach(showtime);
+                    employeeEntity.Showtimes.Add(showtime);
+                }
+            }
+
             _repository.Employee.CreateEmployee(employeeEntity);
             await _repository.SaveAsync();
 

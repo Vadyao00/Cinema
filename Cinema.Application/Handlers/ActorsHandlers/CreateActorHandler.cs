@@ -23,6 +23,17 @@ namespace Cinema.Application.Handlers.ActorsHandlers
         {
             var actorEntity = _mapper.Map<Actor>(request.ActorDto);
 
+            actorEntity.Movies.Clear();
+
+            var movies = await _repository.Movie.GetMoviesByIdsAsync(request.ActorDto.MoviesIds, false);
+
+            if(movies is not null)
+                foreach( var movie in movies)
+                {
+                    _repository.Movie.Attach(movie);
+                    actorEntity.Movies.Add(movie);
+                }
+
             _repository.Actor.CreateActor(actorEntity);
             await _repository.SaveAsync();
 

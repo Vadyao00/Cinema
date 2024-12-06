@@ -12,6 +12,7 @@ namespace Contracts.IRepositories
         Task<IEnumerable<Showtime>> GetAllShowtimesWithoutMetaAsync(bool trackChanges);
         void CreateShowtimeForMovie(Guid movieId, Showtime showtime);
         void DeleteShowtimeForMovie(Showtime showtime);
+        void Attach(Showtime showtime);
         Task<IEnumerable<Showtime>> GetShowtimesByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

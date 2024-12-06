@@ -27,6 +27,17 @@ namespace Cinema.Application.Handlers.MoviesHandlers
 
             var movieDb = _mapper.Map<Movie>(request.MovieDto);
 
+            movieDb.Actors.Clear();
+
+            var actors = await _repository.Actor.GetActorsByIdsAsync(request.MovieDto.ActorsIds, false);
+
+            if (actors is not null)
+                foreach (var actor in actors)
+                {
+                    _repository.Actor.Attach(actor);
+                    movieDb.Actors.Add(actor);
+                }
+
             _repository.Movie.CreateMovieForGenre(request.GenreId, movieDb);
             await _repository.SaveAsync();
 

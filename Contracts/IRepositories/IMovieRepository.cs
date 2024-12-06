@@ -12,6 +12,6 @@ namespace Contracts.IRepositories
         Task<IEnumerable<Movie>> GetMoviesByIdsAsync(Guid[] ids, bool trackChanges);
         void CreateMovieForGenre(Guid genreId, Movie movie);
         void DeleteMovie(Movie movie);
-        void DetachEntity(Movie movie);
+        void Attach(Movie movie);
     }
 }

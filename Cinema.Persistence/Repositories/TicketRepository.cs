@@ -21,6 +21,9 @@ namespace Cinema.Persistence.Repositories
             var tickets = await FindAll(trackChanges)
                   .FilterTickets(ticketParameters.MinSeatNumber, ticketParameters.MaxSeatNumber)
                   .Include(t => t.Seat)
+                    .ThenInclude(s => s.Event)
+                  .Include(t =>t.Seat.Showtime)
+                    .ThenInclude(s => s.Movie)
                   .Sort(ticketParameters.OrderBy)
                   .Skip((ticketParameters.PageNumber - 1) * ticketParameters.PageSize)
                   .Take(ticketParameters.PageSize)
@@ -36,6 +39,9 @@ namespace Cinema.Persistence.Repositories
             var tickets = await FindByCondition(t => t.SeatId.Equals(seatId), trackChanges)
                   .FilterTickets(ticketParameters.MinSeatNumber, ticketParameters.MaxSeatNumber)
                   .Include(t => t.Seat)
+                    .ThenInclude(s => s.Event)
+                  .Include(t => t.Seat.Showtime)
+                    .ThenInclude(s => s.Movie)
                   .Sort(ticketParameters.OrderBy)
                   .Skip((ticketParameters.PageNumber - 1) * ticketParameters.PageSize)
                   .Take(ticketParameters.PageSize)
@@ -49,6 +55,9 @@ namespace Cinema.Persistence.Repositories
         public async Task<Ticket> GetTicketAsync(Guid id, bool trackChanges) =>
             await FindByCondition(t => t.TicketId.Equals(id), trackChanges)
                   .Include(t => t.Seat)
+                    .ThenInclude(s => s.Event)
+                  .Include(t => t.Seat.Showtime)
+                    .ThenInclude(s => s.Movie)
                   .SingleOrDefaultAsync();
     }
 }

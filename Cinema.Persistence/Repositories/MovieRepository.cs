@@ -70,10 +70,5 @@ namespace Cinema.Persistence.Repositories
         public async Task<IEnumerable<Movie>> GetMoviesByIdsAsync(Guid[] ids, bool trackChanges) =>
             await FindByCondition(m => ids.Contains(m.MovieId), trackChanges)
                   .ToListAsync();
-
-        public void DetachEntity(Movie movie)
-        {
-            dbContext.Entry(movie).State = EntityState.Detached;
-        }
     }
 }

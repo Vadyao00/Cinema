@@ -11,6 +11,7 @@ namespace Contracts.IRepositories
         void CreateActor(Actor actor);
         void DeleteActor(Actor actor);
         void UpdateActor(Actor actor);
+        void Attach(Actor actor);
         Task<IEnumerable<Actor>> GetActorsByIdsAsync(Guid[] ids, bool trackChanges);
     }
 }

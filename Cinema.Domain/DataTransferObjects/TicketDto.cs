@@ -7,5 +7,6 @@
         public int? SeatNumber { get; init; }
 
         public DateOnly PurchaseDate { get; init; }
+        public string? Name { get; init; }
     }
 }

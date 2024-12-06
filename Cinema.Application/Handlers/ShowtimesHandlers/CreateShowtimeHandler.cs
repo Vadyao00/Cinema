@@ -26,6 +26,17 @@ namespace Cinema.Application.Handlers.ShowtimesHandlers
                 return new MovieNotFoundResponse(request.MovieId);
             var showtimeDb = _mapper.Map<Showtime>(request.Showtime);
 
+            showtimeDb.Employees.Clear();
+
+            var employees = await _repository.Employee.GetEmployeesByIdsAsync(request.Showtime.EmployeesIds, false);
+
+            if (employees is not null)
+                foreach (var employee in employees)
+                {
+                    _repository.Employee.Attach(employee);
+                    showtimeDb.Employees.Add(employee);
+                }
+
             _repository.Showtime.CreateShowtimeForMovie(request.MovieId, showtimeDb);
             await _repository.SaveAsync();
 

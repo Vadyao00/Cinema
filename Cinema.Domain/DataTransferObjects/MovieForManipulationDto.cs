@@ -25,5 +25,8 @@ namespace Cinema.Domain.DataTransferObjects
         [Required(ErrorMessage = "Description is a required field.")]
         [MaxLength(500, ErrorMessage = "Maximum length for the Description is 500 characters.")]
         public string? Description { get; init; }
+
+        [Required(ErrorMessage = "ActorsIds is a required field.")]
+        public Guid[]? ActorsIds { get; init; }
     }
 }
